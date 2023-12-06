@@ -1,0 +1,51 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<head>
+<title>13 More Fun to Go</title>
+<meta content="text/html; charset=utf-8" http-equiv="default-style"/>
+<link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
+<meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
+</head>
+<body epub:type="bodymatter">
+<div class="body">
+<p class="sp"> </p>
+<section aria-labelledby="ch13" epub:type="chapter" role="doc-chapter">
+<header>
+<p class="bor-top"/>
+<h1 class="chapter-number" id="ch13"><span aria-label="273" id="pg_273" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">13</samp>     <samp class="SANS_Helvetica_LT_Std_Bold_B_11">More Fun to Go</samp></h1>
+</header>
+<blockquote epub:type="epigraph" role="doc-epigraph">
+<p class="EP1">We shall not cease from exploration, and at the end we will arrive where we started, and know the place for the first time.</p>
+<p class="EPA1">—T. S. Eliot (1888–1965)</p>
+</blockquote>
+<p class="noindent">Congratulations! We’ve finished the construction of a complete computing system, starting from first principles. We hope that you enjoyed this journey. Let us, the authors of this book, share a secret with you: We suspect that we enjoyed writing the book even more. After all, we got to design this computing system, and design is often the “funnest” part of every project. We are sure that some of you, adventurous learners, would like to get in on that design action. Maybe you would like to improve the architecture; maybe you have ideas for adding new features here and there; maybe you envision a wider system. And then, maybe, you want to be in the navigator’s seat and decide where to go, not just how to get there.</p>
+<p>Almost every aspect of the Jack/Hack system can be improved, optimized, or extended. For example, the assembly language, the Jack language, and the operating system can be modified and extended by rewriting portions of your respective assembler, compiler, and OS implementations. Other changes would likely require modifying the supplied software tools as well. For example, if you change the hardware specification or the VM specification, then you would likely want to modify the respective emulators. Or, if you want to add more input or output devices to the Hack computer, you would probably need to model them by writing new built-in chips.</p>
+<p>In order to allow complete flexibility of modification and extension, we made the source code of all the supplied tools publicly available. All our code is 100 percent Java, except for some of the batch files used for starting the software on some platforms. The software and its documentation are available at <a href="http://www.nand2tetris.org">www<wbr/>.nand2tetris<wbr/>.org</a>. You are welcome to modify and extend all our tools as you deem desirable for your latest idea—and then share them with others, if you want. We hope that our code is written and documented well enough to make modifications a satisfying experience. In particular, we wish to mention that the supplied hardware simulator has a simple and well-documented interface for adding new <span aria-label="274" id="pg_274" role="doc-pagebreak"/>built-in chips. This interface can be used for extending the simulated hardware platform with, say, mass storage or communications devices.</p>
+<p>While we cannot even start to imagine what your design improvements may be, we can briefly sketch some of the ones we were thinking of.</p>
+<section epub:type="division">
+<h2 class="head a-head"><b>Hardware Realizations</b></h2>
+<p class="noindent">The hardware modules presented in the book were implemented either in HDL or as supplied executable software modules. This, in fact, is how hardware is actually designed. However, at some point, the HDL designs are typically committed to silicon, becoming “real” computers. Wouldn’t it be nice to make Hack or Jack run on a real hardware platform made of atoms rather than bits?</p>
+<p>Several different approaches may be taken toward this goal. On one extreme, you can attempt to implement the Hack platform on an FPGA board. This would require rewriting all the chip definitions using a mainstream Hardware Description Language and then dealing with implementation issues related to realizing the RAM, the ROM, and the I/O devices on the host board. One such step-by-step optional project, developed by Michael Schröder, is referred to in the <a href="http://www.nand2tetris.org">www<wbr/>.nand2tetris<wbr/>.org</a> website. Another extreme approach may be to attempt emulating Hack, the VM, or even the Jack platform on an existing hardware device like a cell phone. It seems that any such project would want to reduce the size of the Hack screen to keep the cost of the hardware resources reasonable.</p>
+</section>
+<section epub:type="division">
+<h2 class="head a-head"><b>Hardware Improvements</b></h2>
+<p class="noindent">Although Hack is a <i>stored program</i> computer, the program that it runs must be prestored in its ROM device. In the present Hack architecture, there is no way of loading another program into the computer, except for simulating the replacement of the entire physical ROM chip.</p>
+<p>Adding a <i>load program</i> capability in a balanced way would likely involve changes at several levels of the hierarchy. The Hack hardware should be modified to allow loaded programs to reside in the writable RAM rather than in the existing ROM. Some type of permanent storage, like a built-in mass storage chip, should probably be added to the hardware to allow storage of programs. The operating system should be extended to handle this permanent storage device, as well as new logic for loading and running programs. At this point an OS user interface <i>shell</i> would come in handy, providing file and program management commands.</p>
+</section>
+<section epub:type="division">
+<h2 class="head a-head"><span aria-label="275" id="pg_275" role="doc-pagebreak"/><b>High-Level Languages</b></h2>
+<p class="noindent">Like all professionals, programmers have strong feelings about their tools—programming languages—and like to personalize them. And indeed, the Jack language, which leaves much to be desired, can be significantly improved. Some changes are simple, some are more involved, and some—like adding inheritance—would likely require modifying the VM specification as well.</p>
+<p>Another option is realizing more high-level languages over the Hack platform. For example, how about implementing Scheme?</p>
+</section>
+<section epub:type="division">
+<h2 class="head a-head"><b>Optimization</b></h2>
+<p class="noindent">Our Nand to Tetris journey has almost completely sidestepped optimization issues (except for the operating system, which introduced some efficiency measures). Optimization is a great playfield for hackers. You can start with local optimizations in the hardware, or in the compiler, but the best bang for the buck will come from optimizing the VM translator. For example, you may want to reduce the size of the generated assembly code, and make it more efficient. Ambitious optimizations on a more global scale will involve changing the specifications of the machine language or the VM language.</p>
+</section>
+<section epub:type="division">
+<h2 class="head a-head"><b>Communications</b></h2>
+<p class="noindent">Wouldn’t it be nice to connect the Hack computer to the Internet? This could be done by adding a built-in communication chip to the hardware and writing an OS class for dealing with it and for handling higher-level communication protocols. Some other programs would need to talk with the built-in communication chip, providing an interface to the Internet. For example, an HTTP-speaking web browser in Jack seems like a feasible and worthy project.</p>
+<p class="STNI1">These are some of our design itches—what are yours?</p>
+</section>
+</section>
+</div>
+</body>
+</html>
