@@ -1,33 +1,33 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <title>5 Computer Architecture</title>
 <meta content="text/html; charset=utf-8" http-equiv="default-style"/>
 <link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
 <meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
 </head>
-<body epub:type="bodymatter">
+<body>
 <div class="body">
 <p class="sp"> </p>
-<section aria-labelledby="ch5" epub:type="chapter" role="doc-chapter">
+<section aria-labelledby="ch5"role="doc-chapter">
 <header>
 <p class="bor-top"/>
 <h1 class="chapter-number" id="ch5"><span aria-label="83" id="pg_83" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">5</samp>       <samp class="SANS_Helvetica_LT_Std_Bold_B_11">Computer Architecture</samp></h1>
 </header>
-<blockquote epub:type="epigraph" role="doc-epigraph">
+<blockquoterole="doc-epigraph">
 <p class="EP1">Make everything as simple as possible, but not simpler.</p>
 <p class="EPA1">—Albert Einstein (1879–1955)</p>
 </blockquote>
 <p class="noindent">This chapter is the pinnacle of the hardware part of our journey. We are now ready to take the chips that we built in chapters 1–3 and integrate them into a general-purpose computer system, capable of running programs written in the machine language presented in chapter 4. The specific computer that we will build, named Hack, has two important virtues. On the one hand, Hack is a simple machine that can be constructed in a few hours, using previously built chips and the supplied hardware simulator. On the other hand, Hack is sufficiently powerful to illustrate the key operating principles and hardware elements of any general-purpose computer. Therefore, building it will give you a hands-on understanding of how modern computers work, and how they are built.</p>
 <p>Section 5.1 begins with an overview of the <i>von Neumann architecture</i>—a central dogma in computer science underlying the design of almost all modern computers. The Hack platform is a von Neumann machine variant, and section 5.2 gives its exact hardware specification. Section 5.3 describes how the Hack platform can be implemented from previously built chips, in particular the ALU built in project 2 and the registers and memory devices built in project 3. Section 5.4 describes the project in which you will build the computer. Section 5.5 provides perspective. In particular, we compare the Hack machine to industrial-strength computers and emphasize the critical role that optimization plays in the latter.</p>
 <p>The computer that will emerge from this effort will be as simple as possible, but not simpler. On the one hand, the computer will be based on a minimal and elegant hardware configuration. On the other hand, the resulting configuration will be sufficiently powerful for executing programs written in a Java-like programming language, presented in part II of the book. This language will enable developing interactive computer games and applications involving graphics and animation, delivering a solid performance and a satisfying user experience. In order to realize these high-level applications on the barebone hardware platform, we will need to build a compiler, a virtual machine, and an operating system. This will be <span aria-label="84" id="pg_84" role="doc-pagebreak"/>done in part II. For now, let’s complete part I by integrating the chips that we’ve built so far into a complete, general-purpose hardware platform.</p>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>5.1    Computer Architecture Fundamentals</b></h2>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.1.1    The Stored Program Concept</b></h3>
 <p class="noindent">Compared to all the machines around us, the most remarkable feature of the digital computer is its amazing versatility. Here is a machine with a finite and fixed hardware that can perform an infinite number of tasks, from playing games to typesetting books to driving cars. This remarkable versatility—a boon that we have come to take for granted—is the fruit of a brilliant early idea called the <i>stored program</i> concept. Formulated independently by several scientists and engineers in the 1930s, the stored program concept is still considered the most profound invention in, if not the very foundation of, modern computer science.</p>
 <p>Like many scientific breakthroughs, the basic idea is simple. The computer is based on a fixed hardware platform capable of executing a fixed repertoire of simple instructions. At the same time, these instructions can be combined like building blocks, yielding arbitrarily sophisticated programs. Moreover, the logic of these programs is not embedded in the hardware, as was customary in mechanical computers predating 1930. Instead, the program’s code is temporarily stored in the computer’s memory, <i>like data</i>, becoming what is known as <i>software</i>. Since the computer’s operation manifests itself to the user through the currently executing software, the same hardware platform can be made to behave completely differently each time it is loaded with a different program.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.1.2    The von Neumann Architecture</b></h3>
 <p class="noindent">The stored program concept is the key element of both abstract and practical computer models, most notably the <i>Turing machine</i> (1936) and the <i>von Neumann machine</i> (1945). The Turing machine—an abstract artifact describing a deceptively simple computer—is used mainly in theoretical computer science for analyzing the logical foundations of computation. In contrast, the von Neumann machine is a practical model that informs the construction of almost all computer platforms today.</p>
 <p>The von Neumann architecture, shown in <a href="chapter_5.xhtml#fig5-1" id="rfig5-1">figure 5.1</a>, is based on a <i>Central Processing Unit</i> (CPU), interacting with a <i>memory</i> device, receiving data from some <i>input</i> device, and emitting data to some <i>output</i> device. At the heart of this architecture lies the <i>stored program</i> concept: the computer’s memory stores not only the data that the computer manipulates but also the instructions that tell the computer what to do. Let us explore this architecture in some detail.</p>
@@ -35,7 +35,7 @@
 <figcaption><p class="CAP"><b><a href="#rfig5-1">Figure 5.1</a></b>    A generic von Neumann computer architecture.</p></figcaption>
 </figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><span aria-label="85" id="pg_85" role="doc-pagebreak"/><b>5.1.3    Memory</b></h3>
 <p class="noindent">The computer’s <i>Memory</i> can be discussed from both physical and logical perspectives. Physically, the memory is a linear sequence of addressable, fixed-size <i>registers</i>, each having a unique address and a value. Logically, this address space serves two purposes: storing data and storing instructions. Both the “instruction words” and the “data words” are implemented exactly the same way—as sequences of bits.</p>
 <p>All the memory registers—irrespective of their roles—are handled the same way: to access a particular memory register, we supply the register’s address. This action, also referred to as <i>addressing</i>, provides an immediate access to the register’s data. The term <i>Random Access Memory</i> derives from the important requirement that each randomly selected memory register can be reached instantaneously, that is, within the same cycle (or time step), irrespective of the memory size and the register’s location. This requirement clearly carries its weight in memory units that have billions of registers. Readers who built the RAM devices in project 3 know that we’ve already satisfied this requirement.</p>
@@ -44,7 +44,7 @@
 <p class="STNI1"><b>Instruction memory</b>: Before a high-level program can be executed on a target computer, it must first be translated into the machine language of the target computer. Each high-level statement is translated into one or more low-level instructions, which are then written as binary values to a file called the <i>binary</i>, or <i>executable</i>, version of the program. Before running a program, we must first load its binary version from a mass storage device, and serialize its instructions into the computer’s <i>instruction memory</i>.</p>
 <p>From the pure focus of computer architecture, <i>how</i> a program is loaded into the computer’s memory is considered an external issue. What’s important is that when the CPU is called upon to execute a program, the program’s code will already reside in the computer’s memory.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.1.4    Central Processing Unit</b></h3>
 <p class="noindent">The Central Processing Unit (CPU)—the centerpiece of the computer’s architecture—is in charge of executing the instructions of the currently running program. Each instruction tells the CPU which computation to perform, which registers to access, and which instruction to fetch and execute next. The CPU executes these tasks using three main elements: An Arithmetic Logic Unit (ALU), a set of registers, and a control unit.</p>
 <p class="STNI1"><b>Arithmetic Logic Unit</b>: The ALU chip is built to perform all the low-level arithmetic and logical operations featured by the computer. A typical ALU can add two given values, compute their bitwise And, compare them for equality, and so on. How much functionality the ALU should feature is a design decision. In general, any function not supported by the ALU can be realized later, using system software running on top of the hardware platform. The trade-off is simple: hardware implementations are typically more efficient but result in more expensive hardware, while software implementations are inexpensive and less efficient.</p>
@@ -53,7 +53,7 @@
 <p class="STNI1"><b>Control</b>: A computer instruction is a structured package of agreed-upon micro-codes, that is, sequences of one or more bits designed to signal different devices what to do. Thus, before an instruction can be executed, it must first be decoded into its micro-codes. Next, each micro-code is routed to its designated hardware device (ALU, registers, memory) within the CPU, where it tells the device how to partake in the overall execution of the instruction.</p>
 <p class="STNI1"><b>Fetch-Execute</b>: In each step (cycle) of the program’s execution, the CPU fetches a binary machine instruction from the instruction memory, decodes it, and executes it. As a side effect of the instruction’s execution, the CPU also figures out which instruction to fetch and execute next. This repetitive process is sometimes referred to as the <i>fetch-execute cycle</i>.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.1.5    Input and Output</b></h3>
 <p class="noindent">Computers interact with their external environments using a great variety of input and output (I/O) devices: screens, keyboards, storage devices, printers, microphones, speakers, network interface cards, and so on, not to mention the bewildering array of sensors and activators embedded in automobiles, cameras, hearing aids, alarm systems, and all the gadgets around us. There are two reasons why we don’t concern ourselves with these I/O devices. First, every one of them represents a unique piece of machinery, requiring a unique knowledge of engineering. Second, for that very same reason, computer scientists have devised clever schemes for abstracting away this complexity and making all I/O devices look exactly the same to the computer. The key element in this abstraction is called <i>memory-mapped</i> I/O.</p>
 <p>The basic idea is to create a binary emulation of the I/O device, making it appear to the CPU as if it were a regular linear memory segment. This is done by allocating, for each I/O device, a designated area in the computer’s memory that acts as its memory map. In the case of an input device like a keyboard, the memory map is made to continuously reflect the physical state of the device: when the user presses a key on the keyboard, a binary code representing that key appears in the keyboard’s memory map. In the case of an output device like a screen, the screen is made to continuously reflect the state of its designated memory map: when we write a bit in the screen’s memory map, a respective pixel is turned on or off on the screen.</p>
@@ -62,17 +62,17 @@
 <p>The practical implications of memory-mapped I/O are significant: The computer system is totally independent of the number, nature, or make of the I/O devices that interact, or may interact, with it. Whenever we want to connect a new I/O device to the computer, all we have to do is allocate to it a new memory map and take note of the map’s base address (these onetime configurations are carried out by the so-called <i>installer</i> programs). Another necessary element is a <i>device driver</i> program, which is added to the computer’s operating system. This program bridges the gap between the I/O device’s memory map data and the way this data is actually rendered on, or generated by, the physical I/O device.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>5.2    The Hack Hardware Platform: Specification</b></h2>
 <p class="noindent">The architectural framework described thus far is characteristic of any general-purpose computer system. We now turn to describe one specific variant of this architecture: the Hack computer. As usual in Nand to Tetris, we start with the abstraction, focusing on <i>what</i> the computer is designed to do. The computer’s implementation—<i>how</i> it does it—is described later.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.2.1    Overview</b></h3>
 <p class="noindent">The Hack platform is a 16-bit von Neumann machine designed to execute programs written in the Hack machine language. In order to do so, the Hack platform consists of a <i>CPU</i>, two separate memory modules serving as <i>instruction memory</i> and <i>data memory</i>, and two memory-mapped I/O devices: a <i>screen</i> and a <i>keyboard</i>.</p>
 <p>The Hack computer executes programs that reside in an instruction memory. In physical implementations of the Hack platform, the instruction memory can be implemented as a ROM (Read-Only Memory) chip that is preloaded with the required program. Software-based emulators of the Hack computer support this functionality by providing means for <span aria-label="89" id="pg_89" role="doc-pagebreak"/>loading the instruction memory from a text file containing a program written in the Hack machine language.</p>
 <p>The Hack CPU consists of the ALU built in project 2 and three registers named <i>Data register</i> (<samp class="SANS_Consolas_Regular_11">D</samp>), <i>Address register</i> (<samp class="SANS_Consolas_Regular_11">A</samp>), and <i>Program Counter</i> (<samp class="SANS_Consolas_Regular_11">PC</samp>). The <samp class="SANS_Consolas_Regular_11">D</samp> register and the <samp class="SANS_Consolas_Regular_11">A</samp> register are identical to the <samp class="SANS_Consolas_Regular_11">Register</samp> chip built in project 3, and the program counter is identical to the <samp class="SANS_Consolas_Regular_11">PC</samp> chip built in project 3. While the <samp class="SANS_Consolas_Regular_11">D</samp> register is used solely for storing data values, the <samp class="SANS_Consolas_Regular_11">A</samp> register serves one of three different purposes, depending on the context in which it is used: storing a data value (like the <samp class="SANS_Consolas_Regular_11">D</samp> register), selecting an address in the instruction memory, or selecting an address in the data memory.</p>
 <p>The Hack CPU is designed to execute instructions written in the Hack machine language. In case of an <i>A</i>-instruction, the 16 bits of the instruction are treated as a binary value which is loaded as is into the <samp class="SANS_Consolas_Regular_11">A</samp> register. In case of a <i>C</i>-instruction, the instruction is treated as a capsule of control bits that specify various micro-operations to be performed by various chip-parts within the CPU. We now turn to describe how the CPU materializes these micro-codes into concrete actions.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.2.2    Central Processing Unit</b></h3>
 <p class="noindent">The Hack CPU interface is shown in <a href="chapter_5.xhtml#fig5-2" id="rfig5-2">figure 5.2</a>. The CPU is designed to execute 16-bit instructions according to the Hack machine language specification presented in chapter 4. <span aria-label="90" id="pg_90" role="doc-pagebreak"/>The CPU consists of an ALU, two registers named <samp class="SANS_Consolas_Regular_11">A</samp> and <samp class="SANS_Consolas_Regular_11">D</samp>, and a program counter named <samp class="SANS_Consolas_Regular_11">PC</samp> (these internal chip-parts are not seen outside the CPU). The CPU expects to be connected to an instruction memory, from which it fetches instructions for execution, and to a data memory, from which it can read, and into which it can write, data values. The <samp class="SANS_Consolas_Regular_11">inM</samp> input and the <samp class="SANS_Consolas_Regular_11">outM</samp> output hold the values referred to as <samp class="SANS_Consolas_Regular_11">M</samp> in the <i>C</i>-instruction syntax. The <samp class="SANS_Consolas_Regular_11">addressM</samp> output holds the address at which <samp class="SANS_Consolas_Regular_11">outM</samp> should be written.</p>
 <figure class="IMG"><img alt="" id="fig5-2" src="../images/figure_5.2.png" width="450"/>
@@ -82,14 +82,14 @@
 <p>As long as the <samp class="SANS_Consolas_Regular_11">reset</samp> input is 0, the CPU uses the ALU output and the jump bits of the current instruction to decide which instruction to fetch next. If <samp class="SANS_Consolas_Regular_11">reset</samp> is 1, the CPU sets <samp class="SANS_Consolas_Regular_11">pc</samp> to 0. Later in the chapter we’ll connect the CPU’s <samp class="SANS_Consolas_Regular_11">pc</samp> output to the <samp class="SANS_Consolas_Regular_11">address</samp> input of the instruction memory chip, causing the latter to emit the next instruction. This configuration will realize the fetch step of the fetch-execute cycle.</p>
 <p>The CPU’s <samp class="SANS_Consolas_Regular_11">outM</samp> and <samp class="SANS_Consolas_Regular_11">writeM</samp> outputs are realized by <i>combinational</i> logic; thus, they are affected instantaneously by the instruction’s execution. The <samp class="SANS_Consolas_Regular_11">addressM</samp> and <samp class="SANS_Consolas_Regular_11">pc</samp> outputs are <i>clocked</i>: although they are affected by the instruction’s execution, they commit to their new values only in the next time step.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.2.3    Instruction Memory</b></h3>
 <p class="noindent">The Hack <i>instruction memory</i>, called <samp class="SANS_Consolas_Regular_11">ROM32K</samp>, is specified in <a href="chapter_5.xhtml#fig5-3" id="rfig5-3">figure 5.3</a>.</p>
 <figure class="IMG"><img alt="" id="fig5-3" src="../images/figure_5.3.png" width="450"/>
 <figcaption><p class="CAP"><b><a href="#rfig5-3">Figure 5.3</a></b>    The Hack instruction memory interface.</p></figcaption>
 </figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><span aria-label="91" id="pg_91" role="doc-pagebreak"/><b>5.2.4    Input/Output</b></h3>
 <p class="noindent">Access to the input/output devices of the Hack computer is made possible by the computer’s <i>data memory</i>, a read/write RAM device consisting of 32K addressable 16-bit registers. In addition to serving as the computer’s general-purpose data store, the data memory also interfaces between the CPU and the computer’s input/output devices, as we now turn to describe.</p>
 <p>The Hack platform can be connected to two peripheral devices: a <i>screen</i> and a <i>keyboard</i>. Both devices interact with the computer platform through designated memory areas called <i>memory maps</i>. Specifically, images can be drawn on the screen by writing 16-bit values in a designated memory segment called a <i>screen memory map</i>. Similarly, which key is presently pressed on the keyboard can be determined by probing a designated 16-bit memory register called a <i>keyboard memory map</i>.</p>
@@ -105,14 +105,14 @@
 <figcaption><p class="CAP"><b><a href="#rfig5-5">Figure 5.5</a></b>    The Hack <samp class="SANS_Consolas_Regular_11">Keyboard</samp> chip interface.</p></figcaption>
 </figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.2.5    Data Memory</b></h3>
 <p class="noindent">The overall address space of the Hack <i>data memory</i> is realized by a chip named <samp class="SANS_Consolas_Regular_11">Memory</samp>. This chip is essentially a package of three 16-bit chip-parts: <samp class="SANS_Consolas_Regular_11-SC">RAM16K</samp> (a RAM chip of 16K registers, serving as a general-purpose data store), <samp class="SANS_Consolas_Regular_11">Screen</samp> (a built-in RAM chip of 8K registers, acting as the screen memory map), and <samp class="SANS_Consolas_Regular_11">Keyboard</samp> (a built-in register chip, acting as the keyboard memory map). The complete specification is given in <a href="chapter_5.xhtml#fig5-6" id="rfig5-6">figure 5.6</a>.</p>
 <figure class="IMG"><img alt="" height="550" id="fig5-6" src="../images/figure_5.6.png"/>
 <figcaption><p class="CAP"><b><a href="#rfig5-6">Figure 5.6</a></b>    The Hack data memory interface. Note that the decimal values 16384 and 24576 are 4000 and 6000 in hexadecimal.</p></figcaption>
 </figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><span aria-label="93" id="pg_93" role="doc-pagebreak"/><b>5.2.6    Computer</b></h3>
 <p class="noindent">The topmost element in the Hack hardware hierarchy is a computer-on-a-chip named <samp class="SANS_Consolas_Regular_11">Computer</samp> (<a href="chapter_5.xhtml#fig5-7" id="rfig5-7">figure 5.7</a>). The <samp class="SANS_Consolas_Regular_11">Computer</samp> chip can be connected to a screen and a keyboard. The user sees the screen, the keyboard, and a single bit input named <samp class="SANS_Consolas_Regular_11">reset</samp>. When the user sets this bit to <samp class="SANS_Consolas_Regular_11">1</samp> and then to <samp class="SANS_Consolas_Regular_11">0</samp>, the computer starts executing the currently loaded program. From this point onward, the user is at the mercy of the software.</p>
 <figure class="IMG"><img alt="" id="fig5-7" src="../images/figure_5.7.png" width="450"/>
@@ -122,10 +122,10 @@
 <p><span aria-label="94" id="pg_94" role="doc-pagebreak"/>In the Hack computer, the software consists of a binary sequence of 16-bit instructions, written in the Hack machine language and stored in the computer’s instruction memory. Typically, this binary code will be the low-level version of a program written in some high-level language and translated by a <i>compiler</i> into the Hack machine language. The compilation process will be discussed and implemented in part II of the book.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>5.3    Implementation</b></h2>
 <p class="noindent">This section describes a hardware implementation that realizes the Hack computer specified in the previous section. As usual, we don’t give exact building instructions. Rather, we expect readers to discover and complete the implementation details on their own. All the chips described below can be built in HDL and simulated on a personal computer using the supplied hardware simulator.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.3.1    The Central Processing Unit</b></h3>
 <p class="noindent">The implementation of the Hack CPU entails building a logic gate architecture capable of (i) executing a given Hack instruction and (ii) determining which instruction should be fetched and executed next. In order to do so, we will use gate logic for decoding the current instruction, an Arithmetic Logic Unit (ALU) for computing the function specified by the instruction, a set of registers for storing the resulting value, as specified by the instruction, and a program counter for keeping track of which instruction should be fetched and executed next. Since all the underlying building blocks (<samp class="SANS_Consolas_Regular_11">ALU</samp>, registers, <samp class="SANS_Consolas_Regular_11">PC</samp>, and elementary logic gates) were already built in previous chapters, the key question that we now face is how to <span aria-label="95" id="pg_95" role="doc-pagebreak"/>connect these chip-parts judiciously in a way that realizes the desired CPU operation. One possible configuration is illustrated in <a href="chapter_5.xhtml#fig5-8" id="rfig5-8">figure 5.8</a> and explained in the following pages.</p>
 <figure class="IMG"><img alt="" id="fig5-8" src="../images/figure_5.8.png" width="450"/>
@@ -141,12 +141,12 @@
 <p>How can we effect this behavior using gate logic? The answer is hinted in <a href="chapter_5.xhtml#fig5-8">figure 5.8</a>. Note that the output of the <samp class="SANS_Consolas_Regular_11">A</samp> register feeds into the input of the <samp class="SANS_Consolas_Regular_11">PC</samp> register. Thus, if we assert the <samp class="SANS_Consolas_Regular_11">PC</samp>’s load-bit, we’ll enable the operation <img alt="" class="inline" height="10" src="../images/5-C3.png" width="33"/> rather than the default operation <samp class="SANS_Consolas_Regular_11">PC</samp><span class="symb-code">++</span>. We should do this only if we have to effect a jump. Which leads to the next question: How do we know if we have to effect a jump? The answer depends on the three <samp class="SANS_Consolas_Regular_11">j</samp>-bits of the current instruction and the two ALU output bits <samp class="SANS_Consolas_Regular_11">zr</samp> and <samp class="SANS_Consolas_Regular_11">ng</samp>. Taken together, these bits can be used to determine whether the jump condition is satisfied or not.</p>
 <p>We’ll stop here, lest we rob readers of the pleasure of completing the CPU implementation themselves. We hope that as they do so, they will savor the clockwork elegance of the Hack CPU.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.3.2    Memory</b></h3>
 <p class="noindent">The <samp class="SANS_Consolas_Regular_11">Memory</samp> chip of the Hack computer is an aggregate of three chip-parts: <samp class="SANS_Consolas_Regular_11-SC">RAM16K</samp>, <samp class="SANS_Consolas_Regular_11">Screen</samp>, and <samp class="SANS_Consolas_Regular_11">Keyboard</samp>. This modularity, though, is implicit: Hack machine language programs see a <i>single address space</i>, ranging from address 0 to address 24576 (in hexadecimal: 6000).</p>
 <p><span aria-label="97" id="pg_97" role="doc-pagebreak"/>The <samp class="SANS_Consolas_Regular_11">Memory</samp> chip interface is shown in <a href="chapter_5.xhtml#fig5-6">figure 5.6</a>. The implementation of this interface should realize the continuum effect just described. For example, if the <samp class="SANS_Consolas_Regular_11">address</samp> input of the <samp class="SANS_Consolas_Regular_11">Memory</samp> chip happens to be 16384, the implementation should access address 0 in the <samp class="SANS_Consolas_Regular_11">Screen</samp> chip, and so on. Once again, we prefer not to provide too many details and let you figure out the rest of the implementation yourself.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>5.3.3    Computer</b></h3>
 <p class="noindent">We have reached the end of our hardware journey. The topmost <samp class="SANS_Consolas_Regular_11">Computer</samp> chip can be realized using three chip-parts: the <samp class="SANS_Consolas_Regular_11">CPU</samp>, the data <samp class="SANS_Consolas_Regular_11">Memory</samp> chip, and the instruction memory chip, <samp class="SANS_Consolas_Regular_11">ROM32K</samp>. <a href="chapter_5.xhtml#fig5-9" id="rfig5-9">Figure 5.9</a> gives the details.</p>
 <figure class="IMG"><img alt="" id="fig5-9" src="../images/figure_5.9.png" width="450"/>
@@ -155,7 +155,7 @@
 <p>The <samp class="SANS_Consolas_Regular_11">Computer</samp> implementation is designed to realize the following fetch-execute cycle: When the user asserts the <samp class="SANS_Consolas_Regular_11">reset</samp> input, the CPU’s <samp class="SANS_Consolas_Regular_11">pc</samp> output emits 0, causing the instruction memory (<samp class="SANS_Consolas_Regular_11">ROM32K</samp>) to emit the first instruction in the program. The instruction will be executed by the CPU, and this execution may involve reading or writing a data memory register. In the process of executing the instruction, the CPU figures out which instruction to fetch next, and emits this address through its <samp class="SANS_Consolas_Regular_11">pc</samp> output. The CPU’s <samp class="SANS_Consolas_Regular_11">pc</samp> output feeds the <samp class="SANS_Consolas_Regular_11">address</samp> input of the instruction memory, causing the latter to output the instruction that ought to be executed next. This output, in turn, feeds the <samp class="SANS_Consolas_Regular_11">instruction</samp> input of the CPU, closing the fetch-execute cycle.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><span aria-label="98" id="pg_98" role="doc-pagebreak"/><b>5.4    Project</b></h2>
 <p class="noindent"><b>Objective</b>: Build the Hack computer, culminating in the topmost <samp class="SANS_Consolas_Regular_11">Computer</samp> chip.</p>
 <p class="STNI1"><b>Resources</b>: All the chips described in this chapter should be written in HDL and tested on the supplied hardware simulator, using the test programs described below.</p>
@@ -179,7 +179,7 @@
 </figure>
 <p class="STNI1"><b>A web-based version of project 5</b> is available at <a href="http://www.nand2tetris.org">www<wbr/>.nand2tetris<wbr/>.org</a>.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><span aria-label="100" id="pg_100" role="doc-pagebreak"/><b>5.5    Perspective</b></h2>
 <p class="noindent">Following the Nand to Tetris spirit, the architecture of the Hack computer is minimal. Typical computer platforms feature more registers, more data types, more powerful ALUs, and richer instruction sets. Most of these differences, though, are quantitative. From a qualitative standpoint, almost all digital computers, including Hack, are based on the same conceptual architecture: the von Neumann machine.</p>
 <p>In terms of <i>purpose</i>, computer systems can be classified into two categories: <i>general-purpose computers</i> and <i>single-purpose computers</i>. General-purpose computers, like PCs and cell phones, typically interact with a user. They are designed to execute many programs and easily switch from one program to another. <i>Single-purpose computers</i> are usually embedded in other systems like automobiles, cameras, media streamers, medical devices, industrial controllers, and so on. For any particular application, a single program is burned into the dedicated computer’s ROM (Read-Only Memory). For example, in some game consoles, the game software resides in an external cartridge, which is a replaceable ROM module encased in a fancy package. Although general-purpose computers are typically more complex and versatile than dedicated computers, they all share the same basic architectural ideas: stored programs, fetch-decode-execute logic, CPU, registers, and counters.</p>

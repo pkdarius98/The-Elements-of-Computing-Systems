@@ -1,18 +1,18 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <title>3 Test Description Language</title>
 <meta content="text/html; charset=utf-8" http-equiv="default-style"/>
 <link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
 <meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
 </head>
-<body epub:type="backmatter">
+<body>
 <div class="body">
 <p class="sp"> </p>
-<section epub:type="appendix" role="doc-appendix">
+<sectionrole="doc-appendix">
 <header>
 <h1 class="BMH"><span aria-label="299" id="pg_299" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">Appendix 3: Test Description Language</samp></h1>
 </header>
-<blockquote epub:type="epigraph" role="doc-epigraph">
+<blockquoterole="doc-epigraph">
 <p class="EP1">Mistakes are the portals of discovery.</p>
 <p class="EPA2">—James Joyce (1882–1941)</p>
 </blockquote>
@@ -20,7 +20,7 @@
 <p>In order to streamline the definition and execution of the numerous tests scattered all over the book projects, we designed a uniform test description language. This language works almost the same across all the relevant tools supplied in Nand to Tetris: the <i>hardware simulator</i> used for simulating and testing chips written in HDL, the <i>CPU emulator</i> used for simulating and testing machine language programs, and the <i>VM emulator</i> used for simulating and testing programs written in the VM language, which are typically compiled Jack programs.</p>
 <p>Every one of these simulators features a GUI that enables testing the loaded chip or program interactively, or batch-style, using a test script. A test script is a sequence of commands that load a hardware or software module into the relevant simulator and subject the module to a series of preplanned testing scenarios. In addition, the test scripts feature commands for printing the test results and comparing them to desired results, as defined in supplied compare files. In sum, a test script enables a systematic, replicable, and documented testing of the underlying code—an invaluable requirement in any hardware or software development project.</p>
 <p>In Nand to Tetris, we don’t expect learners to write test scripts. All the test scripts necessary to test all the hardware and software modules mentioned in the book are supplied with the project materials. Thus, the purpose of this appendix is not to teach you how to write test scripts but rather to help you understand the syntax and logic of the supplied <span aria-label="300" id="pg_300" role="doc-pagebreak"/>test scripts. Of course, you are welcome to customize the supplied scripts and create new ones, as you please.</p>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A3.1    General Guidelines</b></h2>
 <p class="noindent">The following usage guidelines are applicable to all the software tools and test scripts.</p>
 <p class="STNI1"><b>File format and usage</b>: The act of testing a hardware or software module involves four types of files. Although not required, we recommend that all four files have the same prefix (file name):</p>
@@ -47,7 +47,7 @@
 </ul>
 <p class="TNI1">Note that the simulator’s icons listed above don’t “run the code.” Rather, they run the test script, which runs the code.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A3.2    Testing Chips on the Hardware Simulator</b></h2>
 <p class="noindent">The supplied hardware simulator is designed for testing and simulating chip definitions written in the Hardware Description Language (HDL) described in appendix 2. Chapter 1 provides essential background on chip development and testing; thus, we recommend reading it first.</p>
 <p class="STNI1"><b>Example</b>: <a href="appendix2.xhtml#figA2-1">Figure A2.1</a> in appendix 2 presents an <samp class="SANS_Consolas_Regular_11">Eq3</samp> chip, designed to check whether three 1-bit inputs are equal. <a href="appendix3.xhtml#figA3-1" id="rfigA3-1">Figure A3.1</a> presents <samp class="SANS_Consolas_Regular_11">Eq3.tst</samp>, a script designed to test the chip, and <samp class="SANS_Consolas_Regular_11">Eq3.cmp</samp>, a compare file containing the expected output of this test.</p>
@@ -79,7 +79,7 @@
 <li class="ULL"><i>Exclamation mark</i> (<samp class="SANS_Consolas_Regular_11">!</samp>): Terminates a script command and stops the script execution. The user can later resume the script execution from that point onward. Typically used for debugging purposes.</li>
 </ul>
 <p class="TNI1">Below we group the script commands in two conceptual sections: <i>setup commands</i>, used for loading files and initializing settings, and <i>simulation commands</i>, used for walking the simulator through the actual tests.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>Setup Commands</b></h3>
 <p class="noindent"><samp class="SANS_Consolas_Bold_B_11">load</samp> <b><i>Xxx</i></b><samp class="SANS_Consolas_Bold_B_11">.hdl</samp>: Loads the HDL program stored in <b><i>Xxx</i></b><samp class="SANS_Consolas_Regular_11">.hdl</samp> into the simulator. The file name must include the <samp class="SANS_Consolas_Regular_11">.hdl</samp> extension and must not include a path specification. The simulator will try to load the file from the current folder and, failing that, from the <samp class="SANS_Consolas_Regular_11">tools/builtInChips</samp> folder.</p>
 <p class="STNI1"><samp class="SANS_Consolas_Bold_B_11">output-file</samp> <b><i>Xxx</i></b><samp class="SANS_Consolas_Bold_B_11">.out</samp>: Instructs the simulator to write the results of the <samp class="SANS_Consolas_Regular_11">output</samp> commands in the named file, which must include an <samp class="SANS_Consolas_Regular_11">.out</samp> extension. The output file will be created in the current folder.</p>
@@ -90,7 +90,7 @@
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_A3.4.png"/></figure>
 <p class="noindent"><samp class="SANS_Consolas_Bold_B_11">compare-to</samp> <b><i>Xxx</i></b><samp class="SANS_Consolas_Bold_B_11">.cmp</samp>: Specifies that the output line generated by each subsequent <samp class="SANS_Consolas_Regular_11">output</samp> command should be compared to its corresponding line in the specified compare file (which must include the <samp class="SANS_Consolas_Regular_11">.cmp</samp> extension). If any two lines are not the same, the simulator displays an error message and halts the script execution. The compare file is assumed to be present in the current folder.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>Simulation Commands</b></h3>
 <p class="noindent"><samp class="SANS_Consolas_Bold_B_11">set</samp> <i>varName value</i>: Assigns the value to the variable. The variable is either a pin or an internal variable of the simulated chip or one of its chip-parts. The bit widths of the value and the variable must be compatible.</p>
 <p class="STNI1"><samp class="SANS_Consolas_Bold_B_11">eval</samp>: Instructs the simulator to apply the chip logic to the current values of the input pins and compute the resulting output values.</p>
@@ -127,7 +127,7 @@
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_A3.5.png"/></figure>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A3.3    Testing Machine Language Programs on the CPU Emulator</b></h2>
 <p class="noindent">Unlike the <i>hardware simulator</i>, which is a general-purpose program designed to support the construction of any hardware platform, the supplied <i>CPU emulator</i> is a single-purpose tool, designed to simulate the execution of machine language programs on a specific platform: the Hack computer. The programs can be written either in the symbolic or in the binary Hack machine language described in chapter 4.</p>
 <p>As usual, the simulation involves four files: the tested program (<i>Xxx</i><samp class="SANS_Consolas_Regular_11">.asm</samp> or <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.hack</samp>), a test script (<i>Xxx</i><samp class="SANS_Consolas_Regular_11">.tst</samp>), an optional output file (<i>Xxx</i><samp class="SANS_Consolas_Regular_11">.out</samp>), and an optional compare file (<i>Xxx</i><samp class="SANS_Consolas_Regular_11">.cmp</samp>). All these files reside in the same folder, normally named <i>Xxx</i>.</p>
@@ -144,12 +144,12 @@
 <li class="UL"><i>builtInChipName method argument</i> (<i>s</i>): Not applicable in the CPU emulator.</li>
 <li class="UL"><samp class="SANS_Consolas_Regular_11">tickTock</samp>: This command is used instead of <samp class="SANS_Consolas_Regular_11">tick</samp> and <samp class="SANS_Consolas_Regular_11">tock</samp>. Each <samp class="SANS_Consolas_Regular_11">ticktock</samp> advances the clock one time unit (cycle).</li>
 </ul>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>Default Test Script</b></h3>
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_A3.6.png"/></figure>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><span aria-label="310" id="pg_310" role="doc-pagebreak"/><b>A3.4    Testing VM Programs on the VM Emulator</b></h2>
 <p class="noindent">The supplied <i>VM emulator</i> is a Java implementation of the virtual machine specified in chapters 7–8. It can be used for simulating the execution of VM programs, visualizing their operations, and displaying the states of the effected virtual memory segments.</p>
 <p>A VM program consists of one or more <samp class="SANS_Consolas_Regular_11">.vm</samp> files. Thus, the simulation of a VM program involves the tested program (a single <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.vm</samp> file or an <i>Xxx</i> folder containing one or more <samp class="SANS_Consolas_Regular_11">.vm</samp> files) and, optionally, a test script (<i>Xxx</i><samp class="SANS_Consolas_Regular_11">.tst</samp>), a compare file (<i>Xxx</i><samp class="SANS_Consolas_Regular_11">.cmp</samp>), and an output file (<i>Xxx</i><samp class="SANS_Consolas_Regular_11">.out</samp>). All these files reside in the same folder, normally named <i>Xxx</i>.</p>
@@ -171,7 +171,7 @@
 <p class="STNI1"><samp class="SANS_Consolas_Regular_11">load</samp> <i>source</i>: Where the optional <i>source</i> parameter is either <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.vm</samp>, a file containing VM code, or <i>Xxx</i>, the name of a folder containing one or more <samp class="SANS_Consolas_Regular_11">.vm</samp> files (in which case all of them are loaded, one after the other). If the <samp class="SANS_Consolas_Regular_11">.vm</samp> files are located in the current folder, the source argument can be omitted.</p>
 <p class="STNI1"><samp class="SANS_Consolas_Regular_11">tick</samp> / <samp class="SANS_Consolas_Regular_11">tock</samp>: Not applicable.</p>
 <p class="STNI1"><samp class="SANS_Consolas_Regular_11">vmstep</samp>: Simulates the execution of a single VM command and advances to the next command in the code.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>Default Script</b></h3>
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_A3.7.png"/></figure>
 </section>

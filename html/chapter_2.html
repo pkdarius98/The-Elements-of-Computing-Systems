@@ -1,25 +1,25 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <title>2 Boolean Arithmetic</title>
 <meta content="text/html; charset=utf-8" http-equiv="default-style"/>
 <link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
 <meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
 </head>
-<body epub:type="bodymatter">
+<body>
 <div class="body">
 <p class="sp"> </p>
-<section aria-labelledby="ch2" epub:type="chapter" role="doc-chapter">
+<section aria-labelledby="ch2"role="doc-chapter">
 <header>
 <p class="bor-top"/>
 <h1 class="chapter-number" id="ch2"><span aria-label="31" id="pg_31" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">2</samp>       <samp class="SANS_Helvetica_LT_Std_Bold_B_11">Boolean Arithmetic</samp></h1>
 </header>
-<blockquote epub:type="epigraph" role="doc-epigraph">
+<blockquoterole="doc-epigraph">
 <p class="EP1">Counting is the religion of this generation, its hope and salvation.</p>
 <p class="EPA1">—Gertrude Stein (1874–1946)</p>
 </blockquote>
 <p class="noindent">In this chapter we build a family of chips designed to represent numbers and perform arithmetic operations. Our starting point is the set of logic gates built in chapter 1, and our ending point is a fully functional <i>Arithmetic Logic Unit</i>. The ALU will later become the computational centerpiece of the <i>Central Processing Unit</i> (CPU)—the chip that executes all the instructions handled by the computer. Hence, building the ALU is an important milestone in our Nand to Tetris journey.</p>
 <p>As usual, we approach this task gradually, starting with a background section that describes how binary codes and Boolean arithmetic can be used, respectively, to represent and add signed integers. The Specification section presents a succession of <i>adder chips</i> designed to add two bits, three bits, and pairs of <i>n</i>-bit binary numbers. This sets the stage for the ALU specification, which is based on a surprisingly simple logic design. The Implementation and Project sections provide tips and guidelines on how to build the adder chips and the ALU using HDL and the supplied hardware simulator.</p>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>2.1    Arithmetic Operations</b></h2>
 <p class="noindent">General-purpose computer systems are required to perform at least the following arithmetic operations on signed integers:</p>
 <ul class="List-1">
@@ -33,7 +33,7 @@
 <p class="TNI1"><span aria-label="32" id="pg_32" role="doc-pagebreak"/>We’ll start by developing gate logic that carries out addition and sign conversion. Later, we will show how the other arithmetic operations can be implemented from these two building blocks.</p>
 <p>In mathematics as well as in computer science, <i>addition</i> is a simple operation that runs deep. Remarkably, all the functions performed by digital computers—not only arithmetic operations—can be reduced to adding binary numbers. Therefore, constructive understanding of binary addition holds the key to understanding many fundamental operations performed by the computer’s hardware.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>2.2    Binary Numbers</b></h2>
 <p class="noindent">When we are told that a certain code, say, 6083, represents a number using the <i>decimal system</i>, then, by convention, we take this number to be:</p>
 <figure class="IMG"><img alt="" class="inline" height="16" src="../images/2-1.png" width="318"/></figure>
@@ -46,13 +46,13 @@
 <p>What about representing negative numbers using binary codes? Later in the chapter we’ll present a technique that meets this challenge in a most elegant and satisfying way.</p>
 <p>And what about representing numbers that are greater than, or less than, the maximal and minimal values permitted by the fixed register size? Every high-level language provides abstractions for handling numbers that are as large or as small as we can practically want. These abstractions are typically implemented by lashing together as many <i>n</i>-bit registers as necessary for representing the numbers. Since executing arithmetic and logical operations on multi-word numbers is a slow affair, it is recommended to use this practice only when the application requires processing extremely large or extremely small numbers.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>2.3    Binary Addition</b></h2>
 <p class="noindent">A pair of binary numbers can be added bitwise from right to left, using the same decimal addition algorithm learned in elementary school. First, we add the two rightmost bits, also called the <i>least significant bits</i> (LSB) of the two binary numbers. Next, we add the resulting carry bit to the sum of the next pair of bits. We continue this lockstep process until the two left <i>most significant bits</i> (MSB) are added. Here is an example of this algorithm in action, assuming that we use a fixed word size of 4 bits:</p>
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_2.1.png"/></figure>
 <p><span aria-label="34" id="pg_34" role="doc-pagebreak"/>If the most significant bitwise addition generates a carry of 1, we have what is known as <i>overflow</i>. What to do with overflow is a matter of decision, and ours is to ignore it. Basically, we are content to guarantee that the result of adding any two <i>n</i>-bit numbers will be correct up to <i>n</i> bits. We note in passing that ignoring things is perfectly acceptable as long as one is clear and forthcoming about it.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>2.4    Signed Binary Numbers</b></h2>
 <p class="TNI1">An <i>n</i>-bit binary system can code 2<i><sup>n</sup></i> different things. If we have to represent signed (positive and negative) numbers in binary code, a natural solution is to split the available code space into two subsets: one for representing nonnegative numbers, and the other for representing negative numbers. Ideally, the coding scheme should be chosen such that the introduction of signed numbers would complicate the hardware implementation of arithmetic operations as little as possible.</p>
 <p>Over the years, this challenge has led to the development of several coding schemes for representing signed numbers in binary code. The solution used today in almost all computers is called the <i>two’s complement</i> method, also known as <i>radix complement</i>. In a binary system that uses a word size of <i>n</i> bits, the two’s complement binary code that represents negative <i>x</i> is taken to be the code that represents <img alt="" class="inline" height="12" src="../images/2-5.png" width="39"/>. For example, in a 4-bit binary system, <span class="symb"><img alt="" class="inline" height="11" src="../images/2-6.png" width="16"/></span> is represented using the binary code associated with <img alt="" class="inline" height="13" src="../images/2-7.png" width="64"/>, which happens to be <samp class="SANS_Consolas_Regular_11">1001</samp>. Recalling that <img alt="" class="inline" height="11" src="../images/2-8.png" width="17"/> is represented by <samp class="SANS_Consolas_Regular_11">0111</samp>, we see that <samp class="SANS_Consolas_Regular_11"><img alt="" class="inline" height="10" src="../images/2-9C.png" width="128"/></samp> (ignoring the overflow bit). <a href="chapter_2.xhtml#fig2-1" id="rfig2-1">Figure 2.1</a> lists all the signed numbers represented by a 4-bit system using the two’s complement method.</p>
@@ -69,10 +69,10 @@
 <p class="TNI1">A particularly attractive feature of the two’s complement representation is that <i>subtraction</i> is handled as a special case of addition. To illustrate, consider <img alt="" class="inline" height="12" src="../images/2-14.png" width="36"/> Noting that this is equivalent to <img alt="" class="inline" height="14" src="../images/2-15.png" width="57"/> and following <a href="chapter_2.xhtml#fig2-1">figure 2.1</a>, we proceed to compute <samp class="SANS_Consolas_Regular_11"><img alt="" class="inline" height="10" src="../images/2-16.png" width="83"/></samp> The result is <samp class="SANS_Consolas_Regular_11">1110</samp>, which indeed is the binary code of <span class="symb"><img alt="" class="inline" height="12" src="../images/2-19.png" width="17"/></span>. Here is another example: To compute <img alt="" class="inline" height="14" src="../images/2-17.png" width="82"/> we add <img alt="" class="inline" height="12" src="../images/2-18.png" width="83"/> obtaining the sum <samp class="SANS_Consolas_Regular_11">11011</samp>. Ignoring the overflow bit, we get <samp class="SANS_Consolas_Regular_11">1011</samp>, which is the binary code of <span class="symb"><img alt="" class="inline" height="12" src="../images/2-20.png" width="20"/></span></p>
 <p>We see that the two’s complement method enables adding and subtracting signed numbers using nothing more than the hardware required for adding nonnegative numbers. <span aria-label="35" id="pg_35" role="doc-pagebreak"/>As we will see later in the book, every arithmetic operation, from multiplication to division to square root, can be implemented reductively using binary addition. So, on the one hand, we observe that a huge range of computer capabilities rides on top of binary addition, and on the other hand, we observe that the two’s complement method obviates the need for special hardware for adding and subtracting signed numbers. Taking these two observations together, we are compelled to conclude that the two’s complement method is one of the most remarkable and unsung heroes of applied computer science.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>2.5    Specification</b></h2>
 <p class="noindent">We now turn to specifying a hierarchy of chips, starting with simple adders and culminating with an Arithmetic Logic Unit (ALU). As usual in this book, we focus first on the abstract (<i>what</i> the chips are designed to), delaying implementation details (<i>how</i> they do it) to the next section. We cannot resist reiterating, with pleasure, that thanks to the two’s complement method we don’t have to say anything special about handling signed numbers. All the arithmetic chips that we’ll present work equally well on nonnegative, negative, and mixed-sign numbers.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>2.5.1    Adders</b></h3>
 <p class="noindent">We’ll focus on the following hierarchy of <i>adders</i>:</p>
 <ul class="List-1">
@@ -97,7 +97,7 @@
 <p class="STNI1"><b>Incrementer</b>: When we later design our computer architecture, we will need a chip that adds 1 to a given number (<i>Spoiler</i>: This will enable fetching the next instruction from memory, after executing the current one). Although the <img alt="" class="inline" height="12" src="../images/2-21.png" width="30"/> operation can be realized by our general-propose <samp class="SANS_Consolas_Regular_11">Adder</samp> chip, a dedicated <i>incrementer</i> chip can do it more efficiently. Here is the chip interface:</p>
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_2.2.png"/></figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>2.5.2    The Arithmetic Logic Unit</b></h3>
 <p class="noindent">All the adder chips presented so far are generic: any computer that performs arithmetic operations uses such chips, one way or another. Building on these chips, we now turn to describe an <i>Arithmetic Logic Unit</i>, a chip that will later become the computational centerpiece of our CPU. Unlike the generic gates and chips discussed thus far, the ALU design is unique to the computer built in Nand to Tetris, named Hack. That said, the design principles underlying the Hack ALU are general and instructive. Further, our ALU architecture achieves a great deal of functionality using a minimal set of internal parts. In that respect, it provides a good example of an efficient and elegant logic design.</p>
 <p><span aria-label="37" id="pg_37" role="doc-pagebreak"/>As its name implies, an Arithmetic Logic Unit is a chip designed to compute a set of arithmetic and logic operations. Exactly <i>which</i> operations an ALU should feature is a design decision derived from cost-effectiveness considerations. In the case of the Hack platform, we decided that (i) the ALU will perform only integer arithmetic (and not, for example, floating point arithmetic) and (ii) the ALU will compute the set of eighteen arithmetic-logical functions shown in <a href="chapter_2.xhtml#fig2-5a" id="rfig2-5a">figure 2.5a</a>.</p>
@@ -120,7 +120,7 @@
 <p><span aria-label="41" id="pg_41" role="doc-pagebreak"/>It may be instructive to describe the thought process that led to the design of our ALU. First, we made a tentative list of the primitive operations that we wanted our computer to perform (right column of <a href="chapter_2.xhtml#fig2-5b">figure 2.5b</a>). Next, we used backward reasoning to figure out how <samp class="SANS_Consolas_Regular_11">x</samp>, <samp class="SANS_Consolas_Regular_11">y</samp>, and <samp class="SANS_Consolas_Regular_11">out</samp> can be manipulated in binary fashion in order to carry out the desired operations. These processing requirements, along with our objective to keep the ALU logic as simple as possible, have led to the design decision to use six control bits, each associated with a straightforward operation that can be easily implemented with basic logic gates. The resulting ALU is simple and elegant. And in the hardware business, simplicity and elegance carry the day.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>2.6    Implementation</b></h2>
 <p class="noindent">Our implementation guidelines are intentionally minimal. We already gave many implementation tips along the way, and now it is your turn to discover the missing parts in the chip architectures.</p>
 <p>Throughout this section, when we say “build/implement a logic design that <span class="ellipsis">…</span>,” we expect you to (i) figure out the logic design (e.g., by sketching a gate diagram), (ii) write the HDL code that realizes the design, and (iii) test and debug your design using the supplied test scripts and hardware simulator. More details are given in the next section, which describes project 2.</p>
@@ -131,7 +131,7 @@
 <p class="STNI1"><span aria-label="42" id="pg_42" role="doc-pagebreak"/><b>Incrementer</b>: An <i>n</i>-bit incrementer can be implemented easily in a number of different ways.</p>
 <p class="STNI1"><b>ALU</b>: Our ALU was carefully planned to effect all the desired ALU operations <i>logically</i>, using the simple Boolean operations implied by the six control bits. Therefore, the <i>physical</i> implementation of the ALU can be reduced to implementing these simple operations, following the pseudocode specifications listed at the top of <a href="chapter_2.xhtml#fig2-5b">figure 2.5b</a>. Your first step will likely be creating a logic design for zeroing and negating a 16-bit value. This logic can be used for handling the <samp class="SANS_Consolas_Regular_11">x</samp> and <samp class="SANS_Consolas_Regular_11">y</samp> inputs as well as the <samp class="SANS_Consolas_Regular_11">out</samp> output. Chips for bitwise And-ing and addition have already been built in projects 1 and 2, respectively. Thus, what remains is building logic that selects between these two operations, according to the <samp class="SANS_Consolas_Regular_11">f</samp> control bit (this selection logic was also implemented in project 1). Once this main ALU functionality works properly, you can proceed to implement the required functionality of the single-bit <samp class="SANS_Consolas_Regular_11">zr</samp> and <samp class="SANS_Consolas_Regular_11">ng</samp> outputs.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>2.7    Project</b></h2>
 <p class="noindent"><b>Objective</b>: Implement all the chips presented in this chapter. The only building blocks that you need are some of the gates described in chapter 1 and the chips that you will gradually build in this project.</p>
 <p class="STNI1"><b>Built-in chips</b>: As was just said, the chips that you will build in this project use, as chip-parts, some of the chips described in chapter 1. Even if you’ve built these lower-level chips successfully in HDL, we recommend using their built-in versions instead. As best-practice advice pertaining to all the hardware projects in Nand to Tetris, always prefer using built-in chip-parts instead of their HDL implementations. The built-in chips are guaranteed to operate to specification and are designed to speed up the operation of the hardware simulator.</p>
@@ -139,7 +139,7 @@
 <p>The remaining guidelines for this project are identical to those of project 1. In particular, remember that good HDL programs use as few chip-parts as possible, and there is no need to invent and implement any “helper chips”; your HDL programs should use only chips that were specified in chapters 1 and 2.</p>
 <p class="STNI1"><b>A web-based version of project 2</b> is available at <a href="http://www.nand2tetris.org">www<wbr/>.nand2tetris<wbr/>.org</a>.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><span aria-label="43" id="pg_43" role="doc-pagebreak"/><b>2.8    Perspective</b></h2>
 <p class="noindent">The construction of the multi-bit adder presented in this chapter was standard, although no attention was paid to efficiency. Indeed, our suggested adder implementation is inefficient, due to the delays incurred while the carry bits propagate throughout the <i>n</i>-bit addends. This computation can be accelerated by logic circuits that effect so-called <i>carry lookahead</i> heuristics. Since addition is the most prevalent operation in computer architectures, any such low-level improvement can result in dramatic performance gains throughout the system. Yet in this book we focus mostly on functionality, leaving chip optimization to more specialized hardware books and courses.<sup><a href="#footnote-002" id="footnote-002-backlink" role="doc-noteref">2</a></sup></p>
 <p>The overall functionality of any hardware/software system is delivered jointly by the CPU and the operating system that runs on top of the hardware platform. Thus, when designing a new computer system, the question of how to allocate the desired functionality between the ALU and the OS is essentially a cost/performance dilemma. As a rule, direct hardware implementations of arithmetic and logical operations are more efficient than software implementations but make the hardware platform more expensive.</p>

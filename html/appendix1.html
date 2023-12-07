@@ -1,18 +1,18 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <title>1 Boolean Function Synthesis</title>
 <meta content="text/html; charset=utf-8" http-equiv="default-style"/>
 <link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
 <meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
 </head>
-<body epub:type="backmatter">
+<body>
 <div class="body">
 <p class="sp"> </p>
-<section epub:type="appendix" role="doc-appendix">
+<sectionrole="doc-appendix">
 <header>
 <h1 class="BMH" id="app"><span aria-label="277" id="pg_277" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">Appendix 1: Boolean Function Synthesis</samp></h1>
 </header>
-<blockquote epub:type="epigraph" role="doc-epigraph">
+<blockquoterole="doc-epigraph">
 <p class="EP1">By logic we prove, by intuition we discover.</p>
 <p class="EPA2">—Henri Poincar<span class="dcrit">é</span> (1854–1912)</p>
 </blockquote>
@@ -23,7 +23,7 @@
 <li class="BLL1">Any Boolean function can be expressed using only Nand operators.</li>
 </ul>
 <p class="TNI1">This appendix provides proofs for these claims, and shows that they are interrelated. In addition, the appendix illustrates the process by which Boolean expressions can be simplified using Boolean algebra.</p>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A1.1    Boolean Algebra</b></h2>
 <p class="noindent">The Boolean operators And, Or, and Not have useful algebraic properties. We present some of these properties briefly, noting that their proofs can be easily derived from the relevant truth tables listed in <a href="chapter_1.xhtml#fig1-1">figure 1.1</a> of chapter 1.</p>
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_A1.1.png"/></figure>
@@ -32,7 +32,7 @@
 <p>Boolean simplifications like the one just illustrated have significant practical implications. For example, the original Boolean expression Not (Not (<i>x</i>) And Not (<i>x</i> Or <i>y</i>)) can be implemented in hardware using five logic gates, whereas the simplified expression <i>x</i> Or <i>y</i> can be implemented using a single logic gate. Both expressions deliver the same functionality, but the latter is five times more efficient in terms of cost, energy, and speed of computation.</p>
 <p>Reducing a Boolean expression into a simpler one is an art requiring experience and insight. Various reduction tools and techniques are available, but the problem remains challenging. In general, reducing a Boolean expression into its simplest form is an <i>NP-hard</i> problem.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A1.2    Synthesizing Boolean Functions</b></h2>
 <p class="noindent">Given a truth table of a Boolean function, how can we construct, or synthesize, a Boolean expression that represents this function? And, come to think of it, are we <i>guaranteed</i> that every Boolean function represented by a truth table can also be represented by a Boolean expression?</p>
 <p>These questions have very satisfying answers. First, yes: every Boolean function can be represented by a Boolean expression. Moreover, there is a constructive algorithm for doing just that. To illustrate, refer to <a href="appendix1.xhtml#figA1-1" id="rfigA1-1">figure A1.1</a>, and focus on its leftmost four columns. These columns specify a truth table definition of some three-variable function <i>f</i>(<i>x</i>,<i>y</i>,<i>z</i>). Our goal is to synthesize from these data a Boolean expression that represents this function.</p>
@@ -43,7 +43,7 @@
 <p>Avoiding tedious formality, this example suggests that any Boolean function can be systematically represented by a Boolean expression that has a very specific structure: it is the disjunction (Or-ing) of all the conjunctive (And-ing) functions <i>f<sub>i</sub></i> whose construction was just described. This expression, which is the Boolean version of a sum of products, is sometimes referred to as the function’s <i>disjunctive normal form</i> (DNF).</p>
 <p>Note that if the function has many variables, and thus the truth table has exponentially many rows, the resulting DNF may be long and cumbersome. At this point, Boolean algebra and various reduction techniques can help transform the expression into a more efficient and workable representation.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A1.3    The Expressive Power of Nand</b></h2>
 <p class="noindent">As our <i>Nand to Tetris</i> title suggests, every computer can be built using nothing more than Nand gates. There are two ways to support this claim. One is to actually build a computer from Nand gates only, which is exactly what we do in part I of the book. Another way is to provide a formal proof, which is what we’ll do next.</p>
 <p class="STNI1"><span aria-label="280" id="pg_280" role="doc-pagebreak"/><b>Lemma 1</b>: Any Boolean function can be represented by a Boolean expression containing only And, Or, and Not operators.</p>

@@ -1,24 +1,24 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <title>2 Hardware Description Language</title>
 <meta content="text/html; charset=utf-8" http-equiv="default-style"/>
 <link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
 <meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
 </head>
-<body epub:type="backmatter">
+<body>
 <div class="body">
 <p class="sp"> </p>
-<section epub:type="appendix" role="doc-appendix">
+<sectionrole="doc-appendix">
 <header>
 <h1 class="BMH"><span aria-label="283" id="pg_283" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">Appendix 2: Hardware Description Language</samp></h1>
 </header>
-<blockquote epub:type="epigraph" role="doc-epigraph">
+<blockquoterole="doc-epigraph">
 <p class="EP1">Intelligence is the faculty of making artificial objects, especially tools to make tools.</p>
 <p class="EPA2">—Henry Bergson (1859–1941)</p>
 </blockquote>
 <p class="noindent">This appendix has two main parts. Sections A2.1–A2.5 describe the HDL language used in the book and in the projects. Section A2.6, named HDL Survival Guide, provides a set of essential tips for completing the hardware projects successfully.</p>
 <p>A Hardware Description Language (HDL) is a formalism for defining <i>chips</i>: objects whose <i>interfaces</i> consist of input and output <i>pins</i> that carry binary signals, and whose <i>implementations</i> are connected arrangements of other, lower-level chips. This appendix describes the HDL that we use in Nand to Tetris. Chapter 1 (in particular, section 1.3) provides essential background that is a prerequisite to this appendix.</p>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A2.1    HDL Basics</b></h2>
 <p class="noindent">The HDL used in Nand to Tetris is a simple language, and the best way to learn it is to play with HDL programs using the supplied hardware simulator. We recommend starting to experiment as soon as you can, beginning with the following example.</p>
 <p class="STNI1"><b>Example</b>: Suppose we have to check whether three 1-bit variables <i>a</i>, <i>b</i>, <i>c</i> have the same value. One way to check this three-way equality is to evaluate the Boolean function <img alt="" class="inline" height="14" src="../images/App02_IEQ_001.png" width="127"/>. Noting that the binary operator <i>not-equal</i> can be realized using a Xor gate, we can implement this function using the HDL program shown in <a href="appendix2.xhtml#figA2-1" id="rfigA2-1">figure A2.1</a>.</p>
@@ -44,7 +44,7 @@
 <p class="TNI1">Pins have fan-in 1 and unlimited fan-out. This means that a pin can be fed from a single source only, yet it can feed (through multiple connections) one or more pins in one or more chip-parts. In the above example, the internal pin <samp class="SANS_Consolas_Regular_11">v</samp> simultaneously feeds three inputs. This is the HDL equivalent of <i>forks</i> in chip diagrams.</p>
 <p class="STNI1"><b>The meaning of a</b> <span class="symb-b">=</span> <b>a</b>: Many chips in the Hack platform use the same pin names. As shown in <a href="appendix2.xhtml#figA2-1">figure A2.1</a>, this leads to statements like <samp class="SANS_Consolas_Regular_11">Xor</samp> <img alt="" class="inline" height="14" src="../images/A2-C3.png" width="141"/> The first two connections feed the <samp class="SANS_Consolas_Regular_11">a</samp> and <samp class="SANS_Consolas_Regular_11">b</samp> inputs of the implemented chip (<samp class="SANS_Consolas_Regular_11">Eq3</samp>) into the <samp class="SANS_Consolas_Regular_11">a</samp> and <samp class="SANS_Consolas_Regular_11">b</samp> inputs of the <samp class="SANS_Consolas_Regular_11">Xor</samp> chip-part. The third connection feeds the <samp class="SANS_Consolas_Regular_11">out</samp> output of the <samp class="SANS_Consolas_Regular_11">Xor</samp> chip-part to the internal pin <samp class="SANS_Consolas_Regular_11">neq1</samp>. Here is a simple rule that helps sort things out: In every chip-part statement, the left side of each <span class="code_eq-symb">=</span> binding always denotes an input or output pin <i>of the chip-part</i>, and the right side always denotes an input, output, or internal pin <i>of the implemented chip</i>.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A2.2    Multi-Bit Buses</b></h2>
 <p class="noindent">Each input, output, or internal pin in an HDL program may be either a single-bit value, which is the default, or a multi-bit value, referred to as a <i>bus</i>.</p>
 <p class="STNI1"><b>Bit numbering and bus syntax</b>: Bits are numbered from right to left, starting with 0. For example, <samp class="SANS_Consolas_Regular_11">sel</samp><span class="code_eq-symb">=</span><samp class="SANS_Consolas_Regular_11">110</samp>, implies that <samp class="SANS_Consolas_Regular_11">sel[2]</samp><span class="code_eq-symb">=</span><samp class="SANS_Consolas_Regular_11">1</samp>, <samp class="SANS_Consolas_Regular_11">sel[1]</samp><span class="code_eq-symb">=</span><samp class="SANS_Consolas_Regular_11">1</samp>, and <samp class="SANS_Consolas_Regular_11">sel[0]</samp><span class="code_eq-symb">=</span><samp class="SANS_Consolas_Regular_11">0</samp>.</p>
@@ -60,7 +60,7 @@
 <figcaption><p class="CAP"><b><a href="#rfigA2-2">Figure A2.2</a></b>    Buses in action (example).</p></figcaption>
 </figure>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A2.3    Built-In Chips</b></h2>
 <p class="noindent">Chips can have either a <i>native</i> implementation, written in HDL, or a <i>built-in</i> implementation, supplied by an executable module written in a high-level programming language. Since <span aria-label="288" id="pg_288" role="doc-pagebreak"/>the Nand to Tetris hardware simulator was written in Java, it was convenient to realize the built-in chips as Java classes. Thus, before building, say, a <samp class="SANS_Consolas_Regular_11">Mux</samp> chip in HDL, the user can load a built-in <samp class="SANS_Consolas_Regular_11">Mux</samp> chip into the hardware simulator and experiment with it. The behavior of the built-in <samp class="SANS_Consolas_Regular_11">Mux</samp> chip is supplied by a Java class file named <samp class="SANS_Consolas_Regular_11">Mux.class</samp>, which is part of the simulator’s software.</p>
 <p>The Hack computer is made from about thirty generic chips, listed in appendix 4. Two of these chips, <samp class="SANS_Consolas_Regular_11">Nand</samp> and <samp class="SANS_Consolas_Regular_11">DFF</samp>, are considered <i>given</i>, or <i>primitive</i>, akin to axioms in logic. The hardware simulator realizes given chips by invoking their built-in implementations. Therefore, in Nand to Tetris, <samp class="SANS_Consolas_Regular_11">Nand</samp> and <samp class="SANS_Consolas_Regular_11">DFF</samp> can be used without building them in HDL.</p>
@@ -76,7 +76,7 @@
 <p class="STNI1"><b>Visualization</b>: If the designer wants to allow users to “see” how chips work, and perhaps change the internal state of the simulated chip interactively, he or she can supply a built-in chip implementation that features a graphical user interface. This GUI will be displayed whenever the built-in chip is loaded into the simulator or invoked as a chip-part. Except for these visual side effects, GUI-empowered chips behave, and can be used, just like any other chip. Section A2.5 provides more details about GUI-empowered chips.</p>
 <p class="STNI1"><b>Extension</b>: If you wish to implement a new input/output device or create a new hardware platform altogether (other than Hack), you can support these constructions with built-in chips. For more information about developing additional or new functionality, see chapter 13.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A2.4    Sequential Chips</b></h2>
 <p class="noindent">Chips can be either <i>combinational</i> or <i>sequential</i>. Combinational chips are time independent: they respond to changes in their inputs instantaneously. Sequential chips are time dependent, also called <i>clocked</i>: when a user or a test script changes the inputs of a sequential chip, the chip outputs may change only at the beginning of the next <i>time unit</i>, also called a <i>cycle</i>. The hardware simulator effects the progression of time using a simulated clock.</p>
 <p class="STNI1"><b>The clock</b>: The simulator’s two-phase clock emits an infinite sequence of values denoted <img alt="" class="inline" height="13" src="../images/A2-C4.png" width="157"/> and so on. The progression of this discrete time series is controlled by two simulator commands called <samp class="SANS_Consolas_Regular_11">tick</samp> and <samp class="SANS_Consolas_Regular_11">tock</samp>. A <samp class="SANS_Consolas_Regular_11">tick</samp> moves the clock value from <i>t</i> to <img alt="" class="inline" height="10" src="../images/A2-4.png" width="15"/>, and a <samp class="SANS_Consolas_Regular_11">tock</samp> from <img alt="" class="inline" height="10" src="../images/A2-4.png" width="15"/> to <img alt="" class="inline" height="14" src="../images/A2-3.png" width="32"/> bringing upon the next time unit. The <i>real time</i> that elapsed during this period is irrelevant for simulation purposes, since the simulated time is controlled by the user, or by a test script, as follows.</p>
@@ -99,7 +99,7 @@
 <p class="TNI1">In both examples, an internal pin (<samp class="SANS_Consolas_Regular_11">loop1</samp> or <samp class="SANS_Consolas_Regular_11">loop2</samp>) attempts to feed the chip’s input from its output, creating a feedback loop. The difference between the two examples is that <samp class="SANS_Consolas_Regular_11">Not</samp> is a combinational chip, whereas <samp class="SANS_Consolas_Regular_11">DFF</samp> is sequential. In the <samp class="SANS_Consolas_Regular_11">Not</samp> example, <samp class="SANS_Consolas_Regular_11">loop1</samp> creates an instantaneous and uncontrolled dependency between <samp class="SANS_Consolas_Regular_11">in</samp> and <samp class="SANS_Consolas_Regular_11">out</samp>, sometimes called a <i>data race</i>. In contrast, in the <samp class="SANS_Consolas_Regular_11">DFF</samp> case, the <samp class="SANS_Consolas_Regular_11">in</samp>-<samp class="SANS_Consolas_Regular_11">out</samp> dependency created by <samp class="SANS_Consolas_Regular_11">loop2</samp> is delayed by the clock, since the <samp class="SANS_Consolas_Regular_11">in</samp> input of the <samp class="SANS_Consolas_Regular_11">DFF</samp> is declared clocked. Therefore, <samp class="SANS_Consolas_Regular_11">out(</samp><i>t</i><samp class="SANS_Consolas_Regular_11">)</samp> is not a function of <samp class="SANS_Consolas_Regular_11">in(</samp><i>t</i><samp class="SANS_Consolas_Regular_11">)</samp> but rather of <samp class="SANS_Consolas_Regular_11">in(</samp><i>t</i> - 1<samp class="SANS_Consolas_Regular_11">)</samp>.</p>
 <p>When the simulator evaluates a chip, it checks recursively whether its various connections entail feedback loops. For each loop, the simulator checks whether the loop goes through a clocked pin somewhere along the way. If so, the loop is allowed. Otherwise, the simulator stops processing and issues an error message. This is done to prevent uncontrolled data races.</p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>A2.5    Visualizing Chips</b></h2>
 <p class="noindent">Built-in chips may be <i>GUI empowered</i>. These chips feature visual side effects designed to animate some of the chip operations. When the simulator evaluates a GUI-empowered chip-part, it displays a graphical image on the screen. Using this image, which may include interactive elements, the user can inspect the chip’s current state or change it. The permissible <span aria-label="292" id="pg_292" role="doc-pagebreak"/>GUI-empowered actions are determined, and made possible, by the developer of the built-in chip implementation.</p>
 <p>The present version of the hardware simulator features the following GUI-empowered, built-in chips:</p>
@@ -118,7 +118,7 @@
 </figure>
 <p>Note how the changes effected by the user (step 3) impact the screen (step 4). The circled horizontal line shown on the screen is the visual side effect of storing <samp class="SANS_Consolas_Regular_11">–1</samp> in memory location 5012. Since the 16-bit two’s complement binary code of –1 is 1111111111111111, the computer draws 16 pixels starting at column 320 of row 156, which happen to be the screen coordinates associated with RAM address 5012. The mapping of memory <i>addresses</i> on (<i>row</i>, <i>column</i>) screen coordinates is specified in chapter 4 (section 4.2.5).<span aria-label="293" id="pg_293" role="doc-pagebreak"/></p>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><span aria-label="294" id="pg_294" role="doc-pagebreak"/><b>A2.6    HDL Survival Guide</b></h2>
 <p class="noindent">This section provides practical tips about how to develop chips in HDL using the supplied hardware simulator. The tips are listed in no particular order. We recommend reading this section once, beginning to end, and then consulting it as needed.</p>
 <p class="STNI1"><b>Chip</b>: Your <samp class="SANS_Consolas_Regular_11">nand2tetris/projects</samp> folder includes thirteen subfolders, named <samp class="SANS_Consolas_Regular_11">01</samp>, <samp class="SANS_Consolas_Regular_11">02</samp>, <span class="ellipsis">…</span>, <samp class="SANS_Consolas_Regular_11">13</samp> (corresponding to the relevant chapter numbers). The hardware project folders are <samp class="SANS_Consolas_Regular_11">01</samp>, <samp class="SANS_Consolas_Regular_11">02</samp>, <samp class="SANS_Consolas_Regular_11">03</samp>, and <samp class="SANS_Consolas_Regular_11">05</samp>. Each hardware project folder contains a set of supplied HDL <i>stub files</i>, one for each chip that you have to build. The supplied HDL files contain no implementations; building these implementations is what the project is all about. If you do not build these chips in the order in which they are described in the book, you may run into difficulties. For example, suppose that you start project 1 by building the Xor chip. If your <samp class="SANS_Consolas_Regular_11">Xor.hdl</samp> implementation includes, say, And and Or chip-parts, and you have not yet implemented <samp class="SANS_Consolas_Regular_11">And.hdl</samp> and <samp class="SANS_Consolas_Regular_11">Or.hdl</samp>, your <samp class="SANS_Consolas_Regular_11">Xor.hdl</samp> program will not work even if its implementation is perfectly correct.</p>

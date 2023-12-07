@@ -1,19 +1,19 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <title>6 The Jack OS API</title>
 <meta content="text/html; charset=utf-8" http-equiv="default-style"/>
 <link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
 <meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
 </head>
-<body epub:type="backmatter">
+<body>
 <div class="body">
 <p class="sp"> </p>
-<section epub:type="appendix" role="doc-appendix">
+<sectionrole="doc-appendix">
 <header>
 <h1 class="BMH"><span aria-label="317" id="pg_317" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">Appendix 6: The Jack OS API</samp></h1>
 </header>
 <p class="noindent">The Jack language is supported by eight standard classes that provide basic OS services like memory allocation, mathematical functions, input capturing, and output rendering. This appendix documents the API of these classes.</p>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>Math</b></h2>
 <p class="noindent">This class provides commonly needed mathematical functions.</p>
 <ul class="no-bullet">
@@ -24,7 +24,7 @@
 <li class="UL2"><samp class="SANS_Consolas_Regular_11">function</samp> <samp class="SANS_Consolas_Regular_11">int</samp> <samp class="SANS_Consolas_Regular_11">sqrt(int</samp> <samp class="SANS_Consolas_Regular_11">x)</samp>: Returns the integer part of the square root of <samp class="SANS_Consolas_Regular_11">x</samp>.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>String</b></h2>
 <p class="noindent">This class represents strings of <samp class="SANS_Consolas_Regular_11">char</samp> values and provides commonly needed string processing services.</p>
 <ul class="no-bullet">
@@ -42,7 +42,7 @@
 <li class="UL2"><samp class="SANS_Consolas_Regular_11">function</samp> <samp class="SANS_Consolas_Regular_11">char</samp> <samp class="SANS_Consolas_Regular_11">newLine()</samp>: Returns the newline character.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>Array</b></h2>
 <p class="noindent">In the Jack language, arrays are implemented as instances of the OS class <samp class="SANS_Consolas_Regular_11">Array</samp>. Once declared, the array elements can be accessed using the syntax <samp class="SANS_Consolas_Regular_11">arr[i]</samp>. Jack arrays are not typed: each array element can hold a primitive data type or an object type, and different elements in the same array can have different types.</p>
 <ul class="no-bullet">
@@ -50,7 +50,7 @@
 <li class="UL"><samp class="SANS_Consolas_Regular_11">method</samp> <samp class="SANS_Consolas_Regular_11">void</samp> <samp class="SANS_Consolas_Regular_11">dispose()</samp>: Disposes this array.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>Output</b></h2>
 <p class="noindent">This class provides functions for displaying characters. It assumes a character-oriented screen consisting of 23 rows (indexed 0<span class="ellipsis">…</span>22, top to bottom) of 64 characters each (indexed 0<span class="ellipsis">…</span>63, left to right). The top-left character location on the screen is indexed (0,0). Each character is displayed by rendering on the screen a rectangular image 11 pixels high and 8 pixels wide (which includes margins for character spacing and line spacing). If needed, the bitmap images (“font”) of all the characters can be found by inspecting the given code of the <samp class="SANS_Consolas_Regular_11">Output</samp> class. A visible cursor, implemented as a small filled square, indicates where the next character will be displayed.</p>
 <ul class="no-bullet">
@@ -62,7 +62,7 @@
 <li class="UL2"><samp class="SANS_Consolas_Regular_11">function</samp> <samp class="SANS_Consolas_Regular_11">void</samp> <samp class="SANS_Consolas_Regular_11">backSpace()</samp>: Moves the cursor one column back.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>Screen</b></h2>
 <p class="noindent">This class provides functions for displaying graphical shapes on the screen. The Hack physical screen consists of 256 rows (indexed 0<span class="ellipsis">…</span>255, top to bottom) of 512 pixels each (indexed 0<span class="ellipsis">…</span>511, left to right). The top-left pixel on the screen is indexed (0,0).</p>
 <ul class="no-bullet">
@@ -74,7 +74,7 @@
 <li class="UL2"><samp class="SANS_Consolas_Regular_11">function</samp> <samp class="SANS_Consolas_Regular_11">void</samp> <samp class="SANS_Consolas_Regular_11">drawCircle(int</samp> <samp class="SANS_Consolas_Regular_11">x,</samp> <samp class="SANS_Consolas_Regular_11">int</samp> <samp class="SANS_Consolas_Regular_11">y,</samp> <samp class="SANS_Consolas_Regular_11">int</samp> <samp class="SANS_Consolas_Regular_11">r)</samp>: Draws a filled circle of radius <samp class="SANS_Consolas_Regular_11">r</samp> <span class="symb">≤</span> 181 around (<samp class="SANS_Consolas_Regular_11">x,y</samp>) using the current color.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>Keyboard</b></h2>
 <p class="noindent">This class provides functions for reading inputs from a standard keyboard.</p>
 <ul class="no-bullet">
@@ -84,7 +84,7 @@
 <li class="UL2"><samp class="SANS_Consolas_Regular_11">function</samp> <samp class="SANS_Consolas_Regular_11">int</samp> <samp class="SANS_Consolas_Regular_11">readInt(String</samp> <samp class="SANS_Consolas_Regular_11">message)</samp>: Displays the message, reads from the keyboard the entered string of characters until a <samp class="SANS_Consolas_Regular_11">newLine</samp> character is detected, displays the string on the screen, and returns its integer value until the first non-digit character in the entered string is detected. Also handles user backspaces.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>Memory</b></h2>
 <p class="noindent">This class provides memory management services. The Hack RAM consists of 32,768 words, each holding a 16-bit binary number.</p>
 <ul class="no-bullet">
@@ -94,7 +94,7 @@
 <li class="UL2"><samp class="SANS_Consolas_Regular_11">function</samp> <samp class="SANS_Consolas_Regular_11">void</samp> <samp class="SANS_Consolas_Regular_11">deAlloc(Array</samp> <samp class="SANS_Consolas_Regular_11">o)</samp>: Deallocates the given object, which is cast as an array. In other words, makes the RAM block that starts in this address available for future memory allocations.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>Sys</b></h2>
 <p class="noindent">This class provides basic program execution services.</p>
 <ul class="no-bullet">

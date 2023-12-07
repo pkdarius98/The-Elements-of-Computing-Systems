@@ -1,19 +1,19 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
+<html lang="en">
 <head>
 <title>10 Compiler I: Syntax Analysis</title>
 <meta content="text/html; charset=utf-8" http-equiv="default-style"/>
 <link href="../styles/stylesheet.css" rel="stylesheet" type="text/css"/>
 <meta content="urn:uuid:28e15094-8b6c-42d2-9184-6ba334c47321" name="Adept.expected.resource"/>
 </head>
-<body epub:type="bodymatter">
+<body>
 <div class="body">
 <p class="sp"> </p>
-<section aria-labelledby="ch10" epub:type="chapter" role="doc-chapter">
+<section aria-labelledby="ch10"role="doc-chapter">
 <header>
 <p class="bor-top"/>
 <h1 class="chapter-number" id="ch10"><span aria-label="191" id="pg_191" role="doc-pagebreak"/><samp class="SANS_Helvetica_LT_Std_Bold_B_11">10</samp>     <samp class="SANS_Helvetica_LT_Std_Bold_B_11">Compiler I: Syntax Analysis</samp></h1>
 </header>
-<blockquote epub:type="epigraph" role="doc-epigraph">
+<blockquoterole="doc-epigraph">
 <p class="EP1">Neither can embellishments of language be found without arrangement and expression of thoughts, nor can thoughts be made to shine without the light of language.</p>
 <p class="EPA1">—Cicero (106–43 B.C.)</p>
 </blockquote>
@@ -22,7 +22,7 @@
 <p>Writing a compiler from the ground up is an exploit that brings to bear several fundamental topics in computer science. It requires the use of parsing and language translation techniques, application of classical data structures like trees and hash tables, and use of recursive compilation algorithms. For all these reasons, writing a compiler is also a challenging feat. However, by splitting the compiler’s construction into two separate projects (actually <i>four</i>, counting chapters 7 and 8 as well) and by allowing the modular development and unit-testing of each part in isolation, we turn the compiler’s development into a manageable and self-contained activity.</p>
 <p><span aria-label="192" id="pg_192" role="doc-pagebreak"/>Why should you go through the trouble of building a compiler? Aside from the benefits of feeling competent and accomplished, a hands-on grasp of compilation internals will turn you into a better high-level programmer. Further, the same rules and grammars used for describing programming languages are also used in diverse fields like computer graphics, communications and networks, bioinformatics, machine learning, data science, and blockchain technology. And, the vibrant area of <i>natural language processing</i>—the enabling science and practice behind intelligent chatbots, robotic personal assistants, language translators, and many artificial intelligence applications—requires abilities for analyzing texts and synthesizing semantics. Thus, while most programmers don’t develop compilers in their regular jobs, many programmers have to parse and manipulate texts and data sets of complex and varying structures. These tasks can be done efficiently and elegantly using the algorithms and techniques described in this chapter.</p>
 <p>We start with a Background section that surveys the minimal set of concepts necessary for building a syntax analyzer: lexical analysis, context-free grammars, parse trees, and recursive descent parsing algorithms. This sets the stage for a Specification section that presents the Jack language grammar and the output that a Jack analyzer is expected to generate. The Implementation section proposes a software architecture for constructing a Jack analyzer, along with a suggested API. As usual, the Project section gives step-by-step instructions and test programs for building a syntax analyzer. In the next chapter, this analyzer will be extended into a full-scale compiler.</p>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>10.1    Background</b></h2>
 <p class="noindent">Compilation consists of two main stages: <i>syntax analysis</i> and <i>code generation</i>. The syntax analysis stage is usually divided further into two substages: <i>tokenizing</i>, the grouping of input characters into language atoms called <i>tokens</i>, and <i>parsing,</i> the grouping of tokens into structured statements that have a meaning.</p>
 <p>The tokenizing and parsing tasks are completely independent of the target language into which we seek to translate the source input. Since in this chapter we don’t deal with code generation, we have chosen to have the syntax analyzer output the parsed structure of the input program as an XML file. This decision has two benefits. First, the output file can be readily inspected, demonstrating that the syntax analyzer is parsing source programs correctly. Second, the requirement to output this file explicitly forces us to write the syntax analyzer in an architecture that can be later morphed into a full-scale compiler. Indeed, as <a href="chapter_10.xhtml#fig10-1" id="rfig10-1">figure 10.1</a> shows, in the next chapter we will extend the syntax analyzer developed in this chapter into a full-scale compilation engine capable of generating executable VM code rather than passive XML code.</p>
@@ -31,7 +31,7 @@
 </figure>
 <p>In this chapter we focus only on the syntax analyzer module of the compiler, whose job is <i>understanding the structure of a program</i>. This notion needs explanation. When humans read the source code of a computer program, they can immediately relate to the program’s structure. <span aria-label="193" id="pg_193" role="doc-pagebreak"/>They can do so since they have a mental image of the language’s <i>grammar</i>. In particular, they sense which program constructs are valid, and which are not. Using this grammatical insight, humans can identify where classes and methods begin and end, what are declarations, what are statements, what are expressions and how they are built, and so on. In order to recognize these language constructs, which may well be nested, humans recursively map them on the range of textual patterns accepted by the language grammar.</p>
 <p>Syntax analyzers can be developed to perform similarly by building them according to a given <i>grammar</i>—the set of rules that define the syntax of a programming language. To understand—<i>parse</i>—a given program means to determine the exact correspondence between the program’s text and the grammar’s rules. To do so, we must first transform the program’s text into a list of <i>tokens</i>, as we now turn to describe.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>10.1.1    Lexical Analysis</b></h3>
 <p class="noindent">Each programming language specification includes the types of <i>tokens</i>, or words, that the language recognizes. In the Jack language, tokens fall into five categories: <i>keywords</i> (like <samp class="SANS_Consolas_Regular_11">class</samp> and <samp class="SANS_Consolas_Regular_11">while</samp>), <i>symbols</i> <img alt="" class="inline" height="14" src="../images/10-1.png" width="88"/> <i>integer constants</i> (like <samp class="SANS_Consolas_Regular_11">17</samp> and <samp class="SANS_Consolas_Regular_11">314</samp>), <i>string constants</i> (like <samp class="SANS_Consolas_Regular_11">"</samp><samp class="SANS_Consolas_Regular_11">FAQ</samp><samp class="SANS_Consolas_Regular_11">"</samp> and <samp class="SANS_Consolas_Regular_11">"</samp><samp class="SANS_Consolas_Regular_11">Frequently</samp> <samp class="SANS_Consolas_Regular_11">Asked</samp> <samp class="SANS_Consolas_Regular_11">Questions</samp><samp class="SANS_Consolas_Regular_11">"</samp>), and <i>identifiers</i>, which are the textual labels used for naming variables, classes, and subroutines. Taken together, the tokens defined by these lexical categories can be referred to as the language <i>lexicon</i>.</p>
 <p>In its plainest form, a computer program is a stream of characters stored in a text file. The first step in analyzing the program’s syntax is grouping the characters into tokens, as defined by the language lexicon, while ignoring white space and comments. This task is called <i>lexical analysis</i>, <i>scanning</i>, or <i>tokenizing</i>—all meaning exactly the same thing.</p>
@@ -42,7 +42,7 @@
 </figure>
 <p>Tokenizing is a simple and important task. Given a language lexicon, it is not difficult to write a program that turns any given character stream into a stream of tokens. This capability provides the first stepping stone toward developing a syntax analyzer.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>10.1.2    Grammars</b></h3>
 <p class="noindent">Once we develop the ability to access a given text as a stream of tokens, or words, we can proceed to attempt grouping the words into valid sentences. For example, when we hear that “Bob got the job” we nod approvingly, while inputs like “Got job the Bob” or “Job Bob the got” sound weird. We perform these parsing tasks without thinking about them, since our brains have been trained to map sequences of words on patterns that are either accepted or rejected by the English grammar. The grammars of programming languages are much simpler than those of natural languages. See <a href="chapter_10.xhtml#fig10-3" id="rfig10-3">figure 10.3</a> for an example.</p>
 <figure class="IMG"><img alt="" id="fig10-3" src="../images/figure_10.3.png" width="450"/>
@@ -53,7 +53,7 @@
 <p>When there is more than one way to parse a pattern, we use the qualifier | to list the alternatives. For example, the rule <i>statement</i>: <i>letStatement</i> | <i>ifStatement</i> | <i>whileStatement</i> stipulates that a <i>statement</i> can be either a <i>letStatement</i>, an <i>ifStatement</i>, or a <i>whileStatement</i>.</p>
 <p><span aria-label="196" id="pg_196" role="doc-pagebreak"/>The qualifier * is used to denote “0, 1, or more times.” For example, the rule <i>statements</i>: <i>statement</i>* stipulates that <i>statements</i> stands for 0, 1, or more instances of <i>statement</i>. In a similar vein, the qualifier ? is used to denote “0 or 1 times.” For example, the rule <i>expression</i>: <i>term</i> (<i>op term)?</i> stipulates that <i>expression</i> is a <i>term</i> that may or may not be followed by the sequence <i>op term</i>. This implies that, for example, <samp class="SANS_Consolas_Regular_11">x</samp> is an <i>expression</i>, and so are <img alt="" class="inline" height="12" src="../images/10-C2.png" width="78"/> and <img alt="" class="inline" height="11" src="../images/10-C3.png" width="33"/> The qualifiers (and) are used for grouping grammar elements. For example, (<i>op term</i>) stipulates that, in the context of this rule, <i>op</i> followed by <i>term</i> should be treated as one grammatical element.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>10.1.3    Parsing</b></h3>
 <p class="noindent">Grammars are inherently recursive. Just like the sentence “Bob got the job that Alice offered” is considered valid, so is the statement <samp class="SANS_Consolas_Regular_11">if</samp> <img alt="" class="inline" height="14" src="../images/10-C4.png" width="165"/> How can we tell that this input is accepted by the grammar? After getting the first token and realizing that we have an <samp class="SANS_Consolas_Regular_11">if</samp> pattern, we focus on the rule <i>ifStatement</i>: <samp class="SANS_Consolas_Regular_11">'</samp><samp class="SANS_Consolas_Bold_B_11">if</samp><samp class="SANS_Consolas_Regular_11">'</samp> <samp class="SANS_Consolas_Regular_11">'</samp><samp class="SANS_Consolas_Regular_11">(</samp><samp class="SANS_Consolas_Regular_11">'</samp> <i>expression</i> <samp class="SANS_Consolas_Regular_11">'</samp><samp class="SANS_Consolas_Regular_11">)</samp><samp class="SANS_Consolas_Regular_11">'</samp> <samp class="SANS_Consolas_Regular_11">'</samp><samp class="SANS_Consolas_Regular_11">{</samp><samp class="SANS_Consolas_Regular_11">'</samp> <i>statements</i> <samp class="SANS_Consolas_Regular_11">'</samp><samp class="SANS_Consolas_Regular_11">}</samp><samp class="SANS_Consolas_Regular_11">'</samp>. The rule informs that following the token <samp class="SANS_Consolas_Bold_B_11">if</samp> there ought to be the token <samp class="SANS_Consolas_Regular_11">(</samp>, followed by an <i>expression</i>, followed by the token). And indeed, these requirements are satisfied by the input element <img alt="" class="inline" height="14" src="../images/10-C5.png" width="46"/> Back to the rule, we see that we now have to anticipate the token <samp class="SANS_Consolas_Regular_11">{</samp>, followed by <i>statements</i>, followed by the token}. Now, <i>statements</i> is defined as 0 or more instances of <i>statement</i>, and <i>statement</i>, in turn, is either a <i>letStatement</i>, an <i>ifStatement</i>, or a <i>whileStatement</i>. This expectation is met by the inner input element <samp class="SANS_Consolas_Bold_B_11">if</samp> <img alt="" class="inline" height="14" src="../images/10-C6.png" width="84"/> which is an <i>ifStatement</i>.</p>
 <p>We see that the grammar of a programming language can be used to ascertain, without ambiguity, whether given inputs are accepted or rejected.<sup><a href="#footnote-000" id="footnote-000-backlink" role="doc-noteref">1</a></sup> As a side effect of this parsing act, the parser produces an exact correspondence between the given input, on the one hand, and the syntactic patterns admitted by the grammar rules, on the other. The correspondence can be represented by a data structure called a <i>parse tree</i>, also called a <i>derivation tree</i>, like the one shown in <a href="chapter_10.xhtml#fig10-4a" id="rfig10-4a">figure 10.4a</a>. If such a tree can be constructed, the parser renders the input valid; otherwise, it can report that the input contains syntax errors.</p>
@@ -65,7 +65,7 @@
 <figcaption><p class="CAP"><b><a href="#rfig10-4b">Figure 10.4b</a></b>    Same parse tree, in XML.</p></figcaption>
 </figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><span aria-label="198" id="pg_198" role="doc-pagebreak"/><b>10.1.4    Parser</b></h3>
 <p class="noindent">A parser is an agent that operates according to a given grammar. The parser accepts as input a stream of tokens and attempts to produce as output the parse tree associated with the given input. In our case, the input is expected to be structured according to the Jack grammar, and the output is written in XML. Note, though, that the parsing techniques that we now turn to describe are applicable to handling any programming language and structured file format.</p>
 <p>There are several algorithms for constructing parse trees. The top-down approach, also known as <i>recursive descent parsing</i>, attempts to parse the tokenized input recursively, using the nested structures admitted by the language grammar. Such an algorithm can be implemented as follows. For every nontrivial rule in the grammar, we equip the parser program with a routine designed to parse the input according to that rule. For example, the grammar listed in <a href="chapter_10.xhtml#fig10-3">figure 10.3</a> can be implemented using a set of routines named <samp class="SANS_Consolas_Regular_11">compileStatement</samp>, <samp class="SANS_Consolas_Regular_11">compileStatements</samp>, <samp class="SANS_Consolas_Regular_11">compileLet</samp>, <samp class="SANS_Consolas_Regular_11">compileIf</samp>, <span class="ellipsis">…</span>, <samp class="SANS_Consolas_Regular_11">compileExpression</samp>, and so on. We use the action verb <i>compile</i> rather than <i>parse</i>, since in the next chapter we will extend this logic into a full-scale compilation engine.</p>
@@ -80,10 +80,10 @@
 <p>The complete Jack language grammar, which we now turn to present, is <i>LL</i> (1), barring one exception that can be easily handled. Thus, Jack lends itself nicely to a recursive descent parser, which is the centerpiece of project 10.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><span aria-label="200" id="pg_200" role="doc-pagebreak"/><b>10.2    Specification</b></h2>
 <p class="noindent">This section consists of two parts. First, we specify the Jack language’s grammar. Next, we specify a syntax analyzer designed to parse programs according to this grammar.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>10.2.1    The Jack Language Grammar</b></h3>
 <p class="noindent">The functional specification of the Jack language presented in chapter 9 was aimed at Jack programmers; we now give a formal specification of the Jack language, aimed at developers of Jack compilers. The language specification, or <i>grammar</i>, uses the following notation:</p>
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_10.3.png"/></figure>
@@ -92,7 +92,7 @@
 <figcaption><p class="CAP"><b><a href="#rfig10-5">Figure 10.5</a></b>    The Jack grammar.</p></figcaption>
 </figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>10.2.2    A Syntax Analyzer for the Jack Language</b></h3>
 <p class="noindent">A syntax analyzer is a program that performs both tokenizing and parsing. In Nand to Tetris, the main purpose of the syntax analyzer is to process a Jack program and understand its syntactic structure according to the Jack grammar. By <i>understanding</i> we mean that the syntax analyzer must know, at each point in the parsing process, the structural identity of the program element that it is currently handling, that is, whether it is an expression, a statement, a variable name, and so on. The syntax analyzer must possess this syntactic knowledge in a complete recursive sense. Without it, it will be impossible to move on to code generation—the ultimate goal of the compilation process.</p>
 <p class="STNI1"><b>Usage</b>: The syntax analyzer accepts a single command-line argument, as follows,</p>
@@ -105,7 +105,7 @@
 <p>To simplify things, the following Jack grammar rules are not accounted for explicitly in the XML output: <i>type</i>, <i>className</i>, <i>subroutineName</i>, <i>varName</i>, <i>statement</i>, <i>subroutineCall</i>. We will explain this further in the next section, when we discuss the architecture of our compilation engine.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>10.3    Implementation</b></h2>
 <p class="noindent">The previous section specified <i>what</i> a syntax analyzer should do, with few implementation insights. This section describes <i>how</i> to build such an analyzer. Our proposed implementation is based on three modules:</p>
 <ul class="List-1">
@@ -114,12 +114,12 @@
 <li class="BLL1"><samp class="SANS_Consolas_Regular_11">CompilationEngine</samp>: recursive top-down parser</li>
 </ul>
 <p class="TNI1">In the next chapter we will extend this software architecture with two additional modules that handle the language’s semantics: a <i>symbol table</i> and a <i>VM code writer</i>. This will <span aria-label="203" id="pg_203" role="doc-pagebreak"/>complete the construction of a full-scale compiler for the Jack language. Since the main module that drives the parsing process in this project will end up driving the overall compilation process as well, we name it <samp class="SANS_Consolas_Regular_11">CompilationEngine</samp>.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>The JackTokenizer</b></h3>
 <p class="noindent">This module ignores all comments and white space in the input stream and enables accessing the input one token at a time. Also, it parses and provides the <i>type</i> of each token, as defined by the Jack grammar.</p>
 <figure class="IMG-L"><img alt="" class="img100" src="../images/figure_wo_caption_10.7.png"/></figure>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><span aria-label="204" id="pg_204" role="doc-pagebreak"/><b>The CompilationEngine</b></h3>
 <p class="noindent">The <samp class="SANS_Consolas_Regular_11">CompilationEngine</samp> is the backbone module of both the syntax analyzer described in this chapter and the full-scale compiler described in the next chapter. In the syntax analyzer, the compilation engine emits a structured representation of the input source code wrapped in XML tags. In the compiler, the compilation engine will instead emit executable VM code. In both versions, the parsing logic and API presented below are exactly the same.</p>
 <p>The compilation engine gets its input from a <samp class="SANS_Consolas_Regular_11">JackTokenizer</samp> and emits its output to an output file. The output is generated by a series of <samp class="SANS_Consolas_Regular_11">compile</samp><i>xxx</i> routines, each designed to handle the compilation of a specific Jack language construct <i>xxx</i>. The contract between these routines is that each <samp class="SANS_Consolas_Regular_11">compile</samp><i>xxx</i> routine should get from the input, and handle, all the tokens that make up <i>xxx</i>, advance the tokenizer exactly beyond these tokens, and output the parsing of <i>xxx</i>. As a rule, each <samp class="SANS_Consolas_Regular_11">compile</samp><i>xxx</i> routine is called only if the current token is <i>xxx</i>.</p>
@@ -132,7 +132,7 @@
 </figure>
 <p class="STNI1"><span aria-label="206" id="pg_206" role="doc-pagebreak"/><b>The</b> <samp class="SANS_Consolas_Bold_B_11">compileExpressionList</samp> <b>routine:</b> returns the number of expressions in the list. The return value is necessary for generating VM code, as we’ll see when we’ll complete the compiler’s development in project 11. In this project we generate no VM code; therefore the returned value is not used and can be ignored by routines that call <samp class="SANS_Consolas_Regular_11">compileExpressionList</samp>.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>The JackAnalyzer</b></h3>
 <p class="noindent">This is the main program that drives the overall syntax analysis process, using the services of a <samp class="SANS_Consolas_Regular_11">JackTokenizer</samp> and a <samp class="SANS_Consolas_Regular_11">CompilationEngine</samp>. For each source <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.jack</samp> file, the analyzer</p>
 <ol class="List-1">
@@ -143,7 +143,7 @@
 <p class="TNI1">We provide no API for this module, inviting you to implement it as you see fit. Remember that the first routine that must be called when compiling a <samp class="SANS_Consolas_Regular_11">.jack</samp> file is <samp class="SANS_Consolas_Regular_11">compileClass</samp>.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><b>10.4    Project</b></h2>
 <p class="noindent"><b>Objective</b>: Build a syntax analyzer that parses Jack programs according to the Jack grammar. The analyzer’s output should be written in XML, as specified in section 10.2.2.</p>
 <p>This version of the syntax analyzer assumes that the source Jack code is error-free. Error checking, reporting, and handling can be added to later versions of the analyzer but are not part of project 10.</p>
@@ -158,7 +158,7 @@
 <li class="BLL1">Finally, extend your compilation engine to handle array-oriented statements.</li>
 </ul>
 <p class="TNI1">We provide input <samp class="SANS_Consolas_Regular_11">.jack</samp> files and compare <samp class="SANS_Consolas_Regular_11">.xml</samp> files for unit-testing each one of the four stages, as we now turn to describe.</p>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>10.4.1    Tokenizer</b></h3>
 <p class="noindent">Implement the <samp class="SANS_Consolas_Regular_11">JackTokenizer</samp> module specified in section 10.3. Test your implementation by writing a basic version of the <samp class="SANS_Consolas_Regular_11">JackAnalyzer</samp>, defined as follows. The analyzer, which is the main program, is invoked using the command <samp class="SANS_Consolas_Regular_11">JackAnalyzer</samp> <i>source</i>, where <i>source</i> is either a file name of the form <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.jack</samp> (the extension is mandatory) or a folder name (in which case there is no extension). In the latter case, the folder contains one or more <samp class="SANS_Consolas_Regular_11">.jack</samp> files and, possibly, other files as well. The file/folder name may include a file path. If no path is specified, the analyzer operates on the current folder.</p>
 <p>The analyzer handles each file separately. In particular, for each <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.jack</samp> file, the analyzer constructs a <samp class="SANS_Consolas_Regular_11">JackTokenizer</samp> for handling the input and an output file for writing the output. In this first version of the analyzer, the output file is named <i>Xxx</i><samp class="SANS_Consolas_Regular_11">T.xml</samp> (where <samp class="SANS_Consolas_Regular_11">T</samp> stands for <i>tokenized output</i>). The analyzer then enters a loop to <samp class="SANS_Consolas_Regular_11">advance</samp> and handle all the tokens in the input file, one token at a time, using the <samp class="SANS_Consolas_Regular_11">JackTokenizer</samp> methods. Each token should be printed in a separate line, as <span class="symb-code">&lt;</span><i>tokenType</i><span class="symb-code">&gt;</span> <i>token</i> <span class="symb-code">&lt;</span><samp class="SANS_Consolas_Regular_11">/</samp><i>tokenType</i><span class="symb-code">&gt;</span>, where <i>tokenType</i> is one of five possible XML tags coding the token’s type. Here is an example:<span aria-label="208" id="pg_208" role="doc-pagebreak"/></p>
@@ -166,7 +166,7 @@
 <p class="TNI1">Note that in the case of <i>string constants</i>, the program ignores the double quotation marks. This requirement is by design.</p>
 <p>The generated output has two trivial technicalities dictated by XML conventions. First, an XML file must be enclosed within some begin and end tags; this convention is satisfied by the <span class="symb-code">&lt;</span><samp class="SANS_Consolas_Regular_11">tokens</samp><span class="symb-code">&gt;</span> and <span class="symb-code">&lt;</span><samp class="SANS_Consolas_Regular_11">/tokens</samp><span class="symb-code">&gt;</span> tags. Second, four of the symbols used in the Jack language (<span class="symb-code">&lt;</span>, <span class="symb-code">&gt;</span>, <samp class="SANS_Consolas_Regular_11">"</samp>, <samp class="SANS_Consolas_Regular_11">&amp;</samp>) are also used for XML markup; thus they cannot appear as data in XML files. Following convention, the analyzer represents these symbols as <samp class="SANS_Consolas_Regular_11">&amp;lt;</samp>, <samp class="SANS_Consolas_Regular_11">&amp;gt;</samp>, <samp class="SANS_Consolas_Regular_11">&amp;quot;</samp>, and <samp class="SANS_Consolas_Regular_11">&amp;amp;</samp>, respectively. For example, when the parser encounters the <span class="symb-code">&lt;</span> symbol in the input file, it outputs the line <span class="symb-code">&lt;</span><samp class="SANS_Consolas_Regular_11">symbol</samp><span class="symb-code">&gt;</span> <samp class="SANS_Consolas_Regular_11">&amp;lt;</samp> <span class="symb-code">&lt;</span><samp class="SANS_Consolas_Regular_11">/symbol</samp><span class="symb-code">&gt;</span>. This so-called <i>escape sequence</i> is rendered by XML viewers as <span class="symb-code">&lt;</span><samp class="SANS_Consolas_Regular_11">symbol</samp><span class="symb-code">&gt; &lt; &lt;</span><samp class="SANS_Consolas_Regular_11">/symbol</samp><span class="symb-code">&gt;</span>, which is what we want.</p>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><b>Testing Guidelines</b></h3>
 <ul class="List-1">
 <li class="BL1">Start by applying your <samp class="SANS_Consolas_Regular_11">JackAnalyzer</samp> to one of the supplied <samp class="SANS_Consolas_Regular_11">.jack</samp> files, and verify that it operates correctly on a single input file.</li>
@@ -175,7 +175,7 @@
 <li class="BLL">Since the generated and compare files have the same names, we suggest putting them in separate folders.</li>
 </ul>
 </section>
-<section epub:type="division">
+<section>
 <h3 class="head b-head"><span aria-label="209" id="pg_209" role="doc-pagebreak"/><b>10.4.2    Compilation Engine</b></h3>
 <p class="noindent">The next version of your syntax analyzer should be capable of parsing every element of the Jack language, except for expressions and array-oriented commands. To that end, implement the <samp class="SANS_Consolas_Regular_11">CompilationEngine</samp> module specified in section 10.3, except for the routines that handle expressions and arrays. Test the implementation by using your Jack analyzer, as follows.</p>
 <p>For each <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.jack</samp> file, the analyzer constructs a <samp class="SANS_Consolas_Regular_11">JackTokenizer</samp> for handling the input and an output file for writing the output, named <i>Xxx</i><samp class="SANS_Consolas_Regular_11">.xml</samp>. The analyzer then calls the <samp class="SANS_Consolas_Regular_11">compileClass</samp> routine of the <samp class="SANS_Consolas_Regular_11">CompilationEngine</samp>. From this point onward, the <samp class="SANS_Consolas_Regular_11">CompilationEngine</samp> routines should call each other recursively, emitting XML output similar to the one shown in <a href="chapter_10.xhtml#fig10-4b">figure 10.4b</a>.</p>
@@ -187,7 +187,7 @@
 <p class="STNI1"><b>A web-based version of project 10</b> is available at <a href="http://www.nand2tetris.org">www<wbr/>.nand2tetris<wbr/>.org</a>.</p>
 </section>
 </section>
-<section epub:type="division">
+<section>
 <h2 class="head a-head"><span aria-label="210" id="pg_210" role="doc-pagebreak"/><b>10.5    Perspective</b></h2>
 <p class="noindent">Although it is convenient to describe the structure of computer programs using parse trees and XML files, it’s important to understand that compilers don’t necessarily have to maintain such data structures explicitly. For example, the parsing algorithm described in this chapter parses the input as it reads it and does not keep the entire input program in memory. There are essentially two types of strategies for doing such parsing. The simpler strategy works top-down, and that is the one presented in this chapter. The more advanced parsing algorithms, which work bottom-up, were not described here since they require elaboration of more compilation theory.</p>
 <p>Indeed, in this chapter we have sidestepped the formal language theory studied in typical compilation courses. Also, we have chosen a simple syntax for the Jack language—a syntax that can be easily compiled using recursive descent techniques. For example, the Jack grammar does not mandate the usual operator precedence in algebraic expressions evaluation, like multiplication before addition. This enabled us to avoid parsing algorithms that are more powerful, but also more intricate, than the elegant top-down parsing techniques presented in this chapter.</p>
